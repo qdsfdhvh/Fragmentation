@@ -1,19 +1,20 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
-
-
+    compileSdkVersion buildVersions.targetSdk
+    buildToolsVersion buildVersions.buildTools
     defaultConfig {
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion buildVersions.minSdk
+        targetSdkVersion buildVersions.targetSdk
+    }
+    compileOptions {
+        sourceCompatibility buildVersions.sourceCompat
+        targetCompatibility buildVersions.targetCompat
     }
 }
 
 dependencies {
-//    provided "com.android.support:appcompat-v7:$rootProject.v4Version"
-//    compile project(':fragmentation_core')
-
-    api project(':fragmentation_core')
+    implementation deps.kotlin.stdlib
+    api project(':fragmentation_core-ktx')
 }

@@ -1,0 +1,20 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion buildVersions.targetSdk
+    buildToolsVersion buildVersions.buildTools
+    defaultConfig {
+        minSdkVersion buildVersions.minSdk
+        targetSdkVersion buildVersions.targetSdk
+    }
+    compileOptions {
+        sourceCompatibility buildVersions.sourceCompat
+        targetCompatibility buildVersions.targetCompat
+    }
+}
+
+dependencies {
+    implementation deps.kotlin.stdlib
+    api project(':fragmentation_core')
+}

@@ -6,8 +6,8 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import me.yokeyword.fragmentation.R;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
+import me.yokeyword.fragmentation.R;
 
 /**
  * @Hide Created by YoKeyword on 16/7/26.

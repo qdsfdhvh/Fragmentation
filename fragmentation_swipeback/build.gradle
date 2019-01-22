@@ -1,20 +1,15 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
-
+    compileSdkVersion buildVersions.targetSdk
+    buildToolsVersion buildVersions.buildTools
     defaultConfig {
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
-
+        minSdkVersion buildVersions.minSdk
+        targetSdkVersion buildVersions.targetSdk
         consumerProguardFiles 'proguard-rules.pro'
     }
 }
 
 dependencies {
-//    compileOnly "com.android.support:appcompat-v7:$rootProject.v4Version"
-//    compileOnly project(':fragmentation')
-
     api project(':fragmentation')
 }

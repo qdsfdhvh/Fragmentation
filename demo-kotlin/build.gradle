@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+static def gitLatestTag() {
+    try {
+        def cmd = 'git describe --abbrev=0 --tags'
+        def result = cmd.execute().text.trim()
+        return result
+    } catch (Exception ignored) {
+        return '1.0.0'
+    }
+}
+
+android {
+    compileSdkVersion buildVersions.targetSdk
+    buildToolsVersion buildVersions.buildTools
+    defaultConfig {
+        applicationId "me.yokeyword.sample"
+        minSdkVersion buildVersions.minSdk
+        targetSdkVersion buildVersions.targetSdk
+        versionCode 1
+        versionName gitLatestTag()
+    }
+    signingConfigs {
+        releaseConfig {
+            storeFile file("./fragmentation.jks")
+            storePassword System.getenv("KEYSTORE_PASS")
+            keyAlias System.getenv("ALIAS_NAME")
+            keyPassword System.getenv("ALIAS_PASS")
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.buildType.name == 'release') {
+                outputFileName = "fragmentation.apk"
+            }
+        }
+    }
+    androidExtensions {
+        experimental = true
+    }
+}
+
+dependencies {
+    implementation deps.kotlin.stdlib
+    implementation deps.support.appcompat
+    implementation deps.support.desgin
+    implementation project(':fragmentation')
+    implementation project(':fragmentation_swipeback')
+    // EventBus
+    implementation project(':eventbus_activity_scope')
+    testImplementation 'junit:junit:4.12'
+}
+
