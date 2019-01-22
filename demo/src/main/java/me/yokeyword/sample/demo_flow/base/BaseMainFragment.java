@@ -1,9 +1,10 @@
 package me.yokeyword.sample.demo_flow.base;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import androidx.appcompat.widget.Toolbar;
 import me.yokeyword.sample.R;
 
 

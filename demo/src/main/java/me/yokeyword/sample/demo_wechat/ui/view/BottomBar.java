@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -218,7 +217,7 @@ public class BottomBar extends LinearLayout {
                         .setDuration(TRANSLATE_DURATION_MILLIS)
                         .translationY(translationY);
             } else {
-                ViewCompat.setTranslationY(this, translationY);
+                setTranslationY(translationY);
             }
         }
     }

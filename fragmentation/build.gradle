@@ -12,6 +12,8 @@ android {
 }
 
 dependencies {
-    provided "com.android.support:appcompat-v7:$rootProject.v4Version"
-    compile project(':fragmentation_core')
+//    provided "com.android.support:appcompat-v7:$rootProject.v4Version"
+//    compile project(':fragmentation_core')
+
+    api project(':fragmentation_core')
 }
