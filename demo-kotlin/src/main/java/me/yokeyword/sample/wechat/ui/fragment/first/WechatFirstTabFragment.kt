@@ -74,7 +74,7 @@ class WechatFirstTabFragment : BaseMainFragment(), SwipeRefreshLayout.OnRefreshL
             }
         })
 
-        mAdapter!!.setOnItemClickListener { position, view, vh ->
+        mAdapter!!.setOnItemClickListener { position, _, _ ->
             // 因为启动的MsgFragment是MainFragment的兄弟Fragment,所以需要MainFragment.start()
 
             // 也可以像使用getParentFragment()的方式,拿到父Fragment来操作 或者使用 EventBusActivityScope

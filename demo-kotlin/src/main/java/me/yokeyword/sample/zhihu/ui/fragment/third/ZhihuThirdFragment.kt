@@ -15,11 +15,6 @@ import me.yokeyword.sample.zhihu.ui.fragment.third.child.ShopFragment
  */
 class ZhihuThirdFragment : BaseMainFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.zhihu_fragment_third, container, false)
-        return view
-    }
-
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
 
@@ -28,6 +23,8 @@ class ZhihuThirdFragment : BaseMainFragment() {
             loadRootFragment(R.id.fl_third_container, ShopFragment.newInstance())
         }
     }
+
+    override fun getLayoutId() = R.layout.zhihu_fragment_third
 
     companion object {
 

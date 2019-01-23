@@ -3,6 +3,7 @@ package me.yokeyword.sample.zhihu
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.zhihu_activity_main.*
 import me.yokeyword.eventbusactivityscope.EventBusActivityScope
@@ -10,7 +11,7 @@ import me.yokeyword.fragmentation.*
 import me.yokeyword.sample.R
 import me.yokeyword.sample.zhihu.base.BaseMainFragment
 import me.yokeyword.sample.zhihu.event.TabSelectedEvent
-import me.yokeyword.sample.zhihu.ui.fragment.first.ZhihuFirstFragment
+import me.yokeyword.sample.zhihu.ui.fragment.first.ZhiHuFirstFragment
 import me.yokeyword.sample.zhihu.ui.fragment.first.child.FirstHomeFragment
 import me.yokeyword.sample.zhihu.ui.fragment.fourth.ZhihuFourthFragment
 import me.yokeyword.sample.zhihu.ui.fragment.fourth.child.MeFragment
@@ -33,9 +34,9 @@ class MainActivity : SupportActivity(), BaseMainFragment.OnBackToFirstListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zhihu_activity_main)
 
-        val zhiHu = findFragment(ZhihuFirstFragment::class.java)
+        val zhiHu = findFragment(ZhiHuFirstFragment::class.java)
         if (zhiHu == null) {
-            mFragments[FIRST] = ZhihuFirstFragment.newInstance()
+            mFragments[FIRST] = ZhiHuFirstFragment.newInstance()
             mFragments[SECOND] = ZhihuSecondFragment.newInstance()
             mFragments[THIRD] = ZhihuThirdFragment.newInstance()
             mFragments[FOURTH] = ZhihuFourthFragment.newInstance()
@@ -60,6 +61,7 @@ class MainActivity : SupportActivity(), BaseMainFragment.OnBackToFirstListener {
             .addItem(BottomBarTab(this, R.drawable.ic_message_white_24dp))
             .addItem(BottomBarTab(this, R.drawable.ic_account_circle_white_24dp))
         bottomBar.setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
+
             override fun onTabSelected(position: Int, prePosition: Int) {
                 showHideFragment(mFragments[position], mFragments[prePosition])
             }
@@ -69,13 +71,14 @@ class MainActivity : SupportActivity(), BaseMainFragment.OnBackToFirstListener {
             }
 
             override fun onTabReselected(position: Int) {
+                Log.d("TAG", "position = $position")
                 val currentFragment = mFragments[position] ?: return
                 val count = currentFragment.childFragmentManager.backStackEntryCount
 
                 // 如果不在该类别Fragment的主页,则回到主页;
                 if (count > 1) {
                     when (currentFragment) {
-                        is ZhihuFirstFragment -> currentFragment.popToChild(FirstHomeFragment::class.java, false)
+                        is ZhiHuFirstFragment -> currentFragment.popToChild(FirstHomeFragment::class.java, false)
                         is ZhihuSecondFragment -> currentFragment.popToChild(ViewPagerFragment::class.java, false)
                         is ZhihuThirdFragment -> currentFragment.popToChild(ShopFragment::class.java, false)
                         is ZhihuFourthFragment -> currentFragment.popToChild(MeFragment::class.java, false)

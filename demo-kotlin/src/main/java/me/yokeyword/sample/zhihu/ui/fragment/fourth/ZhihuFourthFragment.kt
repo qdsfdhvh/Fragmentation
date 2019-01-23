@@ -1,10 +1,7 @@
 package me.yokeyword.sample.zhihu.ui.fragment.fourth
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.zhihu_fragment_fourth.*
 import me.yokeyword.fragmentation.findChildFragment
 import me.yokeyword.fragmentation.loadRootFragment
 import me.yokeyword.sample.R
@@ -16,37 +13,27 @@ import me.yokeyword.sample.zhihu.ui.fragment.fourth.child.MeFragment
  * Created by YoKeyword on 16/6/3.
  */
 class ZhihuFourthFragment : BaseMainFragment() {
-    private var mToolbar: Toolbar? = null
-    private var mView: View? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mView = inflater.inflate(R.layout.zhihu_fragment_fourth, container, false)
-        return mView
-    }
+    override fun getLayoutId() = R.layout.zhihu_fragment_fourth
 
     override fun onLazyInitView(savedInstanceState: Bundle?) {
         super.onLazyInitView(savedInstanceState)
-        if (findChildFragment(AvatarFragment::class.java) == null) {
-            loadFragment()
-        }
-
-        mToolbar = mView!!.findViewById<View>(R.id.toolbar) as Toolbar
-        mToolbar!!.setTitle(R.string.me)
+        loadFragment()
+        toolbar.setTitle(R.string.me)
     }
 
     private fun loadFragment() {
+        if (findChildFragment(AvatarFragment::class.java) != null) return
         loadRootFragment(R.id.fl_fourth_container_upper, AvatarFragment.newInstance())
         loadRootFragment(R.id.fl_fourth_container_lower, MeFragment.newInstance())
     }
 
     fun onBackToFirstFragment() {
-        _mBackToFirstListener?.onBackToFirstFragment()
+        backToFirstListener?.onBackToFirstFragment()
     }
 
     companion object {
-
         fun newInstance(): ZhihuFourthFragment {
-
             val args = Bundle()
 
             val fragment = ZhihuFourthFragment()

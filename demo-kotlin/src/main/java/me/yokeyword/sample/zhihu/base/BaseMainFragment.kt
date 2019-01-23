@@ -2,21 +2,22 @@ package me.yokeyword.sample.zhihu.base
 
 import android.content.Context
 
-import me.yokeyword.fragmentation.SupportFragment
 import me.yokeyword.fragmentation.popChild
-import me.yokeyword.sample.zhihu.ui.fragment.first.ZhihuFirstFragment
+import me.yokeyword.sample.base.BaseFragment
+import me.yokeyword.sample.zhihu.ui.fragment.first.ZhiHuFirstFragment
 
 /**
  * 懒加载
  * Created by YoKeyword on 16/6/5.
  */
-abstract class BaseMainFragment : SupportFragment() {
-    protected var _mBackToFirstListener: OnBackToFirstListener? = null
+abstract class BaseMainFragment : BaseFragment() {
+
+    protected var backToFirstListener: OnBackToFirstListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnBackToFirstListener) {
-            _mBackToFirstListener = context
+            backToFirstListener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnBackToFirstListener")
         }
@@ -24,7 +25,7 @@ abstract class BaseMainFragment : SupportFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        _mBackToFirstListener = null
+        backToFirstListener = null
     }
 
     /**
@@ -36,10 +37,10 @@ abstract class BaseMainFragment : SupportFragment() {
         if (childFragmentManager.backStackEntryCount > 1) {
             popChild()
         } else {
-            if (this is ZhihuFirstFragment) {   // 如果是 第一个Fragment 则退出app
+            if (this is ZhiHuFirstFragment) {   // 如果是 第一个Fragment 则退出app
                 ctx?.finish()
             } else {                                    // 如果不是,则回到第一个Fragment
-                _mBackToFirstListener!!.onBackToFirstFragment()
+                backToFirstListener!!.onBackToFirstFragment()
             }
         }
         return true

@@ -2,7 +2,5 @@ include ':demo-kotlin',
         ':fragmentation_core',
         ':fragmentation_core-ktx',
         ':fragmentation',
-//        ':fragmentation-ktx',
         ':fragmentation_swipeback',
-//        ':fragmentation_swipeback-ktx',
         ':eventbus_activity_scope'

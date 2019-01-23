@@ -3,7 +3,7 @@ package me.yokeyword.sample
 import android.app.Application
 
 import me.yokeyword.fragmentation.Fragmentation
-import me.yokeyword.fragmentation.helper.ExceptionHandler
+import me.yokeyword.fragmentation.exception.AfterSaveStateTransactionWarning
 
 /**
  * Created by YoKey on 16/11/23.
@@ -25,13 +25,13 @@ class App : Application() {
              * 是否调试
              */
             .debug(BuildConfig.DEBUG)
-            /*
-             * 可以获取到[me.yokeyword.fragmentation.exception.AfterSaveStateTransactionWarning]
+            /**
+             * 可以获取到[AfterSaveStateTransactionWarning]
              * 在遇到After onSaveInstanceState时，不会抛出异常，会回调到下面的ExceptionHandler
              */
             .handleException {
-                // 以Bugtags为例子: 把捕获到的 Exception 传到 Bugtags 后台。
-                // Bugtags.sendException(e);
+                // 以BugTags为例子: 把捕获到的 Exception 传到 BugTags 后台。
+                // BugTags.sendException(e);
             }
             .install()
     }

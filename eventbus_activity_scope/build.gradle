@@ -1,17 +1,21 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
-
+    compileSdkVersion buildVersions.targetSdk
+    buildToolsVersion buildVersions.buildTools
     defaultConfig {
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
-
+        minSdkVersion buildVersions.minSdk
+        targetSdkVersion buildVersions.targetSdk
         consumerProguardFiles 'proguard-rules.pro'
+    }
+    compileOptions {
+        sourceCompatibility buildVersions.sourceCompat
+        targetCompatibility buildVersions.targetCompat
     }
 }
 
 dependencies {
-    api 'org.greenrobot:eventbus:3.0.0'
+    implementation deps.kotlin.stdlib
+    api 'org.greenrobot:eventbus:3.1.1'
 }

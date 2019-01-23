@@ -8,63 +8,43 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.fragment_modify_detail.*
+import kotlinx.android.synthetic.main.toolbar.*
 import me.yokeyword.fragmentation.ISupportFragment
+import me.yokeyword.fragmentation.SupportFragment
 import me.yokeyword.fragmentation.hideSoftInput
 import me.yokeyword.fragmentation.start
 import me.yokeyword.sample.R
-import me.yokeyword.sample.zhihu.base.BaseBackFragment
+import me.yokeyword.sample.base.BaseFragment
+import me.yokeyword.sample.base.initToolbarNav
+import me.yokeyword.sample.base.toast
 import me.yokeyword.sample.zhihu.ui.fragment.CycleFragment
 
 /**
  * Created by YoKeyword on 16/2/7.
  */
-class ModifyDetailFragment : BaseBackFragment() {
+class ModifyDetailFragment : BaseFragment() {
 
-    private lateinit var mToolbar: Toolbar
-    private var mEtModiyTitle: EditText? = null
-    private var mBtnModify: Button? = null
-    private var mBtnNext: Button? = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initToolbarNav(toolbar, R.string.start_result_test)
 
-    private var mTitle: String? = null
+        val mTitle = arguments?.getString(ARG_TITLE) ?: ""
+        et_modify_title!!.setText(mTitle)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val args = arguments
-        if (args != null) {
-            mTitle = args.getString(ARG_TITLE)
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_modify_detail, container, false)
-        initView(view)
-        return view
-    }
-
-    private fun initView(view: View) {
-        mToolbar = view.findViewById(R.id.toolbar)
-        mEtModiyTitle = view.findViewById<View>(R.id.et_modify_title) as EditText
-        mBtnModify = view.findViewById<View>(R.id.btn_modify) as Button
-        mBtnNext = view.findViewById<View>(R.id.btn_next) as Button
-
-        mToolbar.setTitle(R.string.start_result_test)
-        initToolbarNav(mToolbar)
-
-        mEtModiyTitle!!.setText(mTitle)
-
-        // 显示 软键盘
-        //        showSoftInput(mEtModiyTitle);
-
-        mBtnModify!!.setOnClickListener {
+        btn_modify.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString(DetailFragment.KEY_RESULT_TITLE, mEtModiyTitle!!.text.toString())
+            bundle.putString(DetailFragment.KEY_RESULT_TITLE, et_modify_title.text.toString())
             setFragmentResult(ISupportFragment.RESULT_OK, bundle)
 
-            Toast.makeText(ctx, R.string.modify_success, Toast.LENGTH_SHORT).show()
+            toast(R.string.modify_success)
         }
-        mBtnNext!!.setOnClickListener { start(CycleFragment.newInstance(1)) }
+        btn_next.setOnClickListener {
+            start(CycleFragment.newInstance(1))
+        }
     }
+
+    override fun getLayoutId() = R.layout.fragment_modify_detail
 
     override fun onSupportInvisible() {
         super.onSupportInvisible()
@@ -76,6 +56,7 @@ class ModifyDetailFragment : BaseBackFragment() {
 
         fun newInstance(title: String): ModifyDetailFragment {
             val args = Bundle()
+
             val fragment = ModifyDetailFragment()
             args.putString(ARG_TITLE, title)
             fragment.arguments = args

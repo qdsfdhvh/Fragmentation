@@ -9,48 +9,37 @@ import android.widget.TextView
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.content_detail.*
+import kotlinx.android.synthetic.main.zhihu_fragment_first_detail.*
 import me.yokeyword.fragmentation.start
 import me.yokeyword.sample.R
-import me.yokeyword.sample.zhihu.base.BaseBackFragment
+import me.yokeyword.sample.base.BaseFragment
+import me.yokeyword.sample.base.initToolbarNav
+import me.yokeyword.sample.base.lazyAndroid
 import me.yokeyword.sample.zhihu.entity.Article
 import me.yokeyword.sample.zhihu.ui.fragment.CycleFragment
 
 /**
  * Created by YoKeyword on 16/6/5.
  */
-class FirstDetailFragment : BaseBackFragment() {
+class FirstDetailFragment : BaseFragment() {
 
-    private var mArticle: Article? = null
-
-    private var mToolbar: Toolbar? = null
-    private var mImgDetail: ImageView? = null
-    private var mTvTitle: TextView? = null
-    private var mFab: FloatingActionButton? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mArticle = arguments!!.getParcelable(ARG_ITEM)
+    private val article by lazyAndroid {
+        arguments!!.getParcelable<Article>(ARG_ITEM)!!
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.zhihu_fragment_first_detail, container, false)
-        initView(view)
-        return view
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initToolbarNav(toolbar)
+
+        img_detail.setImageResource(article.imgRes)
+        tv_content.text = article.title
+        fab.setOnClickListener {
+            start(CycleFragment.newInstance(1))
+        }
     }
 
-    private fun initView(view: View) {
-        mToolbar = view.findViewById<View>(R.id.toolbar) as Toolbar
-        mImgDetail = view.findViewById<View>(R.id.img_detail) as ImageView
-        mTvTitle = view.findViewById<View>(R.id.tv_content) as TextView
-        mFab = view.findViewById<View>(R.id.fab) as FloatingActionButton
-
-        mToolbar!!.title = ""
-        initToolbarNav(mToolbar!!)
-        mImgDetail!!.setImageResource(mArticle!!.imgRes)
-        mTvTitle!!.text = mArticle!!.title
-
-        mFab!!.setOnClickListener { start(CycleFragment.newInstance(1)) }
-    }
+    override fun getLayoutId() = R.layout.zhihu_fragment_first_detail
 
     companion object {
         private const val ARG_ITEM = "arg_item"

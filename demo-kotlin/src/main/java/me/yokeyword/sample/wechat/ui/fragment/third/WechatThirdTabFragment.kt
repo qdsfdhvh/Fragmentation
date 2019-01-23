@@ -49,7 +49,7 @@ class WechatThirdTabFragment : BaseMainFragment() {
         mRecy!!.layoutManager = manager
         mRecy!!.adapter = mAdapter
 
-        mAdapter!!.setOnItemClickListener { position, view, vh ->
+        mAdapter!!.setOnItemClickListener { position, _, _ ->
             (parentFragment as MainFragment).startBrotherFragment(DetailFragment.newInstance(mAdapter!!.getItem(position).title))
             // 或者使用EventBus
             //                EventBusActivityScope.getDefault(_mActivity).post(new StartBrotherEvent(DetailFragment.newInstance(mAdapter.getItem(position).getTitle())));

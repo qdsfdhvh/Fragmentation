@@ -7,53 +7,38 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.fragment_cycle.*
+import kotlinx.android.synthetic.main.toolbar.*
+import me.yokeyword.fragmentation.SupportFragment
 import me.yokeyword.fragmentation.start
 import me.yokeyword.fragmentation.startWithPop
 import me.yokeyword.sample.R
-import me.yokeyword.sample.zhihu.base.BaseBackFragment
+import me.yokeyword.sample.base.BaseFragment
+import me.yokeyword.sample.base.initToolbarNav
 
 /**
  * Created by YoKeyword on 16/2/7.
  */
-class CycleFragment : BaseBackFragment() {
-
-    private lateinit var mToolbar: Toolbar
-    private var mTvName: TextView? = null
-    private var mBtnNext: Button? = null
-    private var mBtnNextWithFinish: Button? = null
+class CycleFragment : BaseFragment() {
 
     private var mNumber: Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val args = arguments
-        if (args != null) {
-            mNumber = args.getInt(ARG_NUMBER)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val title = "CycleFragment $mNumber"
+        initToolbarNav(toolbar, title)
+        tv_name.text = title
+
+        btn_next_with_finish.setOnClickListener {
+            startWithPop(CycleFragment.newInstance(mNumber + 1))
+        }
+        btn_next.setOnClickListener {
+            start(CycleFragment.newInstance(mNumber + 1))
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_cycle, container, false)
-        initView(view)
-        return view
-    }
-
-
-    private fun initView(view: View) {
-        mToolbar = view.findViewById(R.id.toolbar)
-        mTvName = view.findViewById(R.id.tv_name)
-        mBtnNext = view.findViewById(R.id.btn_next)
-        mBtnNextWithFinish = view.findViewById<View>(R.id.btn_next_with_finish) as Button
-
-        val title = "CyclerFragment $mNumber"
-
-        mToolbar.title = title
-        initToolbarNav(mToolbar)
-
-        mTvName!!.text = title
-        mBtnNext!!.setOnClickListener { start(CycleFragment.newInstance(mNumber + 1)) }
-        mBtnNextWithFinish!!.setOnClickListener { startWithPop(CycleFragment.newInstance(mNumber + 1)) }
-    }
+    override fun getLayoutId() = R.layout.fragment_cycle
 
     companion object {
         private const val ARG_NUMBER = "arg_number"

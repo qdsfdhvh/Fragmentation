@@ -3,6 +3,7 @@ package me.yokeyword.sample.zhihu.ui.fragment.first.child
 import android.os.Build
 import android.os.Bundle
 import android.transition.Fade
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,7 +81,7 @@ class FirstHomeFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
         mRecy!!.layoutManager = manager
         mRecy!!.adapter = mAdapter
 
-        mAdapter!!.setOnItemClickListener { position, view, vh ->
+        mAdapter!!.setOnItemClickListener { position, _, vh ->
             val fragment = FirstDetailFragment.newInstance(mAdapter!!.getItem(position))
 
             // 这里是使用SharedElement的用例
@@ -148,6 +149,8 @@ class FirstHomeFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
         } else {
             scrollToTop()
         }
+
+        lifecycle
     }
 
     override fun onDestroyView() {
@@ -156,10 +159,7 @@ class FirstHomeFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
     }
 
     companion object {
-
-
         fun newInstance(): FirstHomeFragment {
-
             val args = Bundle()
 
             val fragment = FirstHomeFragment()

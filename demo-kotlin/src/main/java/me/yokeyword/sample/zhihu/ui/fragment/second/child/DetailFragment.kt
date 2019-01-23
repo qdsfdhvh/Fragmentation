@@ -1,53 +1,35 @@
 package me.yokeyword.sample.zhihu.ui.fragment.second.child
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.content_detail.*
+import kotlinx.android.synthetic.main.fragment_detail.*
+import kotlinx.android.synthetic.main.toolbar.*
 import me.yokeyword.fragmentation.ISupportFragment
 import me.yokeyword.fragmentation.start
 import me.yokeyword.sample.R
-import me.yokeyword.sample.zhihu.base.BaseBackFragment
+import me.yokeyword.sample.base.BaseFragment
+import me.yokeyword.sample.base.initToolbarNav
+import me.yokeyword.sample.base.lazyAndroid
+import me.yokeyword.sample.base.toast
 
 /**
  * Created by YoKeyword on 16/2/3.
  */
-class DetailFragment : BaseBackFragment() {
+class DetailFragment : BaseFragment() {
 
-    private lateinit var mToolbar: Toolbar
-    private var mTvContent: TextView? = null
-    private var mFab: FloatingActionButton? = null
-    private var mTitle: String? = null
+//    private lateinit var mToolbar: Toolbar
+//    private var mTvContent: TextView? = null
+//    private var mFab: FloatingActionButton? = null
+//    private var mTitle: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val bundle = arguments
-        if (bundle != null) {
-            mTitle = bundle.getString(ARG_TITLE)
-        }
+    private val title by lazyAndroid {
+        arguments?.getString(ARG_TITLE) ?: ""
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_detail, container, false)
-        initView(view)
-
-        return view
-    }
-
-    private fun initView(view: View) {
-        mToolbar = view.findViewById(R.id.toolbar)
-        mFab = view.findViewById<View>(R.id.fab) as FloatingActionButton
-        mTvContent = view.findViewById<View>(R.id.tv_content) as TextView
-
-        mToolbar!!.title = mTitle
-
-        initToolbarNav(mToolbar)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initToolbarNav(toolbar, title)
     }
 
     /**
@@ -63,24 +45,29 @@ class DetailFragment : BaseBackFragment() {
     }
 
     private fun initDelayView() {
-        mTvContent!!.setText(R.string.large_text)
-
-        mFab!!.setOnClickListener { start(ModifyDetailFragment.newInstance(mTitle!!), REQ_MODIFY_FRAGMENT) }
+        tv_content.setText(R.string.large_text)
+        fab.setOnClickListener {
+            start(ModifyDetailFragment.newInstance(title), REQ_MODIFY_FRAGMENT)
+        }
     }
+
+    override fun getLayoutId() = R.layout.fragment_detail
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         super.onFragmentResult(requestCode, resultCode, data)
-        if (requestCode == REQ_MODIFY_FRAGMENT && resultCode == ISupportFragment.RESULT_OK && data != null) {
-            mTitle = data.getString(KEY_RESULT_TITLE)
-            mToolbar!!.title = mTitle
-            // 保存被改变的 title
-            arguments!!.putString(ARG_TITLE, mTitle)
-            Toast.makeText(ctx, R.string.modify_title, Toast.LENGTH_SHORT).show()
+        when(requestCode) {
+            REQ_MODIFY_FRAGMENT -> {
+                if (resultCode == ISupportFragment.RESULT_OK && data != null) {
+                    val value = data.getString(KEY_RESULT_TITLE, "")
+                    tv_content.text = value
+                    arguments?.putString(ARG_TITLE,  value)
+                    toast(R.string.modify_title)
+                }
+            }
         }
     }
 
     companion object {
-        private val TAG = DetailFragment::class.java.simpleName
         private const val REQ_MODIFY_FRAGMENT = 100
         private const val ARG_TITLE = "arg_title"
 
