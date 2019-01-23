@@ -359,8 +359,8 @@ public class SupportFragmentDelegate {
 
         ResultRecord resultRecord = args.getParcelable(TransactionDelegate.FRAGMENTATION_ARG_RESULT_RECORD);
         if (resultRecord != null) {
-            resultRecord.resultCode = resultCode;
-            resultRecord.resultBundle = bundle;
+            resultRecord.setResultCode(resultCode);
+            resultRecord.setResultBundle(bundle);
         }
     }
 
@@ -413,14 +413,16 @@ public class SupportFragmentDelegate {
         Activity activity = mFragment.getActivity();
         if (activity == null) return;
         View view = activity.getWindow().getDecorView();
-        SupportHelper.hideSoftInput(view);
+//        SupportHelper.hideSoftInput(view);
+        SupportHelperKtx.INSTANCE.hideSoftInput(view);
     }
 
     /**
      * 显示软键盘,调用该方法后,会在onPause时自动隐藏软键盘
      */
     public void showSoftInput(View view) {
-        SupportHelper.showSoftInput(view);
+//        SupportHelper.showSoftInput(view);
+        SupportHelperKtx.INSTANCE.showSoftInput(view);
     }
 
 
@@ -569,7 +571,8 @@ public class SupportFragmentDelegate {
     }
 
     private ISupportFragment getTopFragment() {
-        return SupportHelper.getTopFragment(getChildFragmentManager());
+//        return SupportHelper.getTopFragment(getChildFragmentManager());
+        return SupportHelperKtx.INSTANCE.getTopFragment(getChildFragmentManager(), 0);
     }
 
     private void processRestoreInstanceState(Bundle savedInstanceState) {
@@ -609,7 +612,8 @@ public class SupportFragmentDelegate {
             if (mRootViewClickable) return;
             final View view = mFragment.getView();
             if (view == null) return;
-            ISupportFragment preFragment = SupportHelper.getPreFragment(mFragment);
+//            ISupportFragment preFragment = SupportHelper.getPreFragment(mFragment);
+            ISupportFragment preFragment = SupportHelperKtx.INSTANCE.getPreFragment(mFragment);
             if (preFragment == null) return;
 
             long prePopExitDuration = preFragment.getSupportDelegate().getPopExitAnimDuration();

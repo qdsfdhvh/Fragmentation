@@ -38,12 +38,12 @@ class MainFragment : SupportFragment() {
             mFragments[THIRD] = WechatThirdTabFragment.newInstance()
 
             loadRootFragments(R.id.fl_tab_container,
+                FIRST,
                 arrayOf(
                     mFragments[FIRST],
                     mFragments[SECOND],
                     mFragments[THIRD]
-                ),
-                FIRST
+                )
             )
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion buildVersions.targetSdk
@@ -12,9 +14,12 @@ android {
         sourceCompatibility buildVersions.sourceCompat
         targetCompatibility buildVersions.targetCompat
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
-//    compileOnly "com.android.support:appcompat-v7:$rootProject.v4Version"
+    implementation deps.kotlin.stdlib
     api deps.support.appcompat
 }

@@ -13,6 +13,7 @@ import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragmentDelegate;
 import me.yokeyword.fragmentation.SupportHelper;
+import me.yokeyword.fragmentation.SupportHelperKtx;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
@@ -355,6 +356,7 @@ public class MySupportFragment extends Fragment implements ISupportFragment {
      * 获取栈内的fragment对象
      */
     public <T extends ISupportFragment> T findChildFragment(Class<T> fragmentClass) {
-        return SupportHelper.findFragment(getChildFragmentManager(), fragmentClass);
+//        return SupportHelper.findFragment(getChildFragmentManager(), fragmentClass);
+        return SupportHelperKtx.INSTANCE.findFragment(getChildFragmentManager(), fragmentClass);
     }
 }

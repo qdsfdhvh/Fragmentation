@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import me.yokeyword.fragmentation.anim.DefaultNoAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.flow.adapter.MenuAdapter;
@@ -60,7 +59,7 @@ public class MenuListFragment extends MySupportFragment {
 
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
-        return new DefaultNoAnimator();
+        return FragmentAnimator.Companion.noAnimator();
     }
 
     private void initView(View view) {

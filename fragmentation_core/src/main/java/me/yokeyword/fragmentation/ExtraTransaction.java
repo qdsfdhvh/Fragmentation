@@ -20,7 +20,7 @@ public abstract class ExtraTransaction {
 
     /**
      * @param tag Optional tag name for the fragment, to later retrieve the
-     *            fragment with {@link SupportHelper#findFragment(FragmentManager, String)}
+     *            fragment with {@link SupportHelper(FragmentManager, String)}
      *            , pop(String)
      *            or FragmentManager.findFragmentByTag(String).
      */

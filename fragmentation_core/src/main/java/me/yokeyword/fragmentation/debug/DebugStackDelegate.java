@@ -125,22 +125,22 @@ public class DebugStackDelegate implements SensorEventListener {
             if (i == fragmentRecordList.size() - 1) {
                 sb.append("═══════════════════════════════════════════════════════════════════════════════════\n");
                 if (i == 0) {
-                    sb.append("\t栈顶\t\t\t").append(fragmentRecord.fragmentName).append("\n");
+                    sb.append("\t栈顶\t\t\t").append(fragmentRecord.getFragmentName()).append("\n");
                     sb.append("═══════════════════════════════════════════════════════════════════════════════════");
                 } else {
-                    sb.append("\t栈顶\t\t\t").append(fragmentRecord.fragmentName).append("\n\n");
+                    sb.append("\t栈顶\t\t\t").append(fragmentRecord.getFragmentName()).append("\n\n");
                 }
             } else if (i == 0) {
-                sb.append("\t栈底\t\t\t").append(fragmentRecord.fragmentName).append("\n\n");
-                processChildLog(fragmentRecord.childFragmentRecord, sb, 1);
+                sb.append("\t栈底\t\t\t").append(fragmentRecord.getFragmentName()).append("\n\n");
+                processChildLog(fragmentRecord.getChildFragmentRecord(), sb, 1);
                 sb.append("═══════════════════════════════════════════════════════════════════════════════════");
                 Log.i(tag, sb.toString());
                 return;
             } else {
-                sb.append("\t↓\t\t\t").append(fragmentRecord.fragmentName).append("\n\n");
+                sb.append("\t↓\t\t\t").append(fragmentRecord.getFragmentName()).append("\n\n");
             }
 
-            processChildLog(fragmentRecord.childFragmentRecord, sb, 1);
+            processChildLog(fragmentRecord.getChildFragmentRecord(), sb, 1);
         }
     }
 
@@ -166,16 +166,16 @@ public class DebugStackDelegate implements SensorEventListener {
                 sb.append("\t\t\t");
             }
             if (j == 0) {
-                sb.append("\t子栈顶\t\t").append(childFragmentRecord.fragmentName).append("\n\n");
+                sb.append("\t子栈顶\t\t").append(childFragmentRecord.getFragmentName()).append("\n\n");
             } else if (j == fragmentRecordList.size() - 1) {
-                sb.append("\t子栈底\t\t").append(childFragmentRecord.fragmentName).append("\n\n");
-                processChildLog(childFragmentRecord.childFragmentRecord, sb, ++childHierarchy);
+                sb.append("\t子栈底\t\t").append(childFragmentRecord.getFragmentName()).append("\n\n");
+                processChildLog(childFragmentRecord.getChildFragmentRecord(), sb, ++childHierarchy);
                 return;
             } else {
-                sb.append("\t↓\t\t\t").append(childFragmentRecord.fragmentName).append("\n\n");
+                sb.append("\t↓\t\t\t").append(childFragmentRecord.getFragmentName()).append("\n\n");
             }
 
-            processChildLog(childFragmentRecord.childFragmentRecord, sb, childHierarchy);
+            processChildLog(childFragmentRecord.getChildFragmentRecord(), sb, childHierarchy);
         }
     }
 

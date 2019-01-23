@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import me.yokeyword.fragmentation.ISupportFragment;
-import me.yokeyword.fragmentation.SupportHelper;
+import me.yokeyword.fragmentation.SupportHelperKtx;
 
 /**
  * The queue of perform action.
@@ -57,7 +57,8 @@ public class ActionQueue {
 
     private void executeNextAction(Action action) {
         if (action.action == Action.ACTION_POP) {
-            ISupportFragment top = SupportHelper.getBackStackTopFragment(action.fragmentManager);
+//            ISupportFragment top = SupportHelper.getBackStackTopFragment(action.fragmentManager);
+            ISupportFragment top = SupportHelperKtx.INSTANCE.getBackStackTopFragment(action.fragmentManager, 0);
             action.duration = top == null ? Action.DEFAULT_POP_TIME : top.getSupportDelegate().getExitAnimDuration();
         }
 

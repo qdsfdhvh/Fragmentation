@@ -20,9 +20,9 @@ fun ISupportFragment.loadRootFragment(containerId: Int,
  * @param showPosition 默认显示第x个fragment
  * @param fragments 待添加的fragments
  */
-fun ISupportFragment.loadRootFragments(containerId: Int,
-                                                             fragments: Array<ISupportFragment?>,
-                                                             showPosition: Int) {
+fun <T: ISupportFragment> ISupportFragment.loadRootFragments(containerId: Int,
+                                       showPosition: Int,
+                                       fragments: Array<T?>) {
     supportDelegate.loadMultipleRootFragment(containerId, showPosition, *fragments)
 }
 
@@ -103,7 +103,7 @@ fun ISupportFragment.popChild() {
  */
 fun <T : ISupportFragment> ISupportFragment.findFragment(clazz: Class<T>): T? {
     if (this !is Fragment) return null
-    return SupportHelper.findFragment(fragmentManager, clazz)
+    return SupportHelperKtx.findFragment(fragmentManager, clazz)
 }
 
 /**
@@ -111,7 +111,7 @@ fun <T : ISupportFragment> ISupportFragment.findFragment(clazz: Class<T>): T? {
  */
 fun <T : ISupportFragment> ISupportFragment.findChildFragment(clazz: Class<T>): T? {
     if (this !is Fragment) return null
-    return SupportHelper.findFragment(childFragmentManager, clazz)
+    return SupportHelperKtx.findFragment(childFragmentManager, clazz)
 }
 
 /**

@@ -3,7 +3,6 @@ package me.yokeyword.sample.flow
 import android.os.Bundle
 
 import me.yokeyword.fragmentation.SwipeBackLayout
-import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 import me.yokeyword.fragmentation.findFragment
 import me.yokeyword.fragmentation.loadRootFragment
@@ -37,6 +36,6 @@ class SwipeBackSampleActivity : SwipeBackActivity() {
     }
 
     override fun onCreateFragmentAnimator(): FragmentAnimator {
-        return DefaultHorizontalAnimator()
+        return FragmentAnimator.horizontalAnimator()
     }
 }

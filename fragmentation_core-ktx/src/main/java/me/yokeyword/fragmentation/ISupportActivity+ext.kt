@@ -76,7 +76,7 @@ fun ISupportActivity.pop() {
  */
 fun <T : ISupportFragment> ISupportActivity.findFragment(clazz: Class<T>): T? {
     if (this !is FragmentActivity) return null
-    return SupportHelper.findFragment(supportFragmentManager, clazz)
+    return SupportHelperKtx.findFragment(supportFragmentManager, clazz)
 }
 
 /**

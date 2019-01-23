@@ -12,6 +12,7 @@ import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportActivityDelegate;
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.SupportHelper;
+import me.yokeyword.fragmentation.SupportHelperKtx;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
@@ -143,7 +144,7 @@ public abstract class MySupportActivity extends AppCompatActivity implements ISu
     }
 
     /**
-     * It is recommended to use {@link SupportFragment#startWithPopTo(ISupportFragment, Class, boolean)}.
+     * It is recommended to use {@link SupportFragment#(ISupportFragment, Class, boolean)}.
      *
      * @see #popTo(Class, boolean)
      * +
@@ -184,13 +185,15 @@ public abstract class MySupportActivity extends AppCompatActivity implements ISu
      * 得到位于栈顶Fragment
      */
     public ISupportFragment getTopFragment() {
-        return SupportHelper.getTopFragment(getSupportFragmentManager());
+//        return SupportHelper.getTopFragment(getSupportFragmentManager());
+        return SupportHelperKtx.INSTANCE.getTopFragment(getSupportFragmentManager(), 0);
     }
 
     /**
      * 获取栈内的fragment对象
      */
     public <T extends ISupportFragment> T findFragment(Class<T> fragmentClass) {
-        return SupportHelper.findFragment(getSupportFragmentManager(), fragmentClass);
+//        return SupportHelper.findFragment(getSupportFragmentManager(), fragmentClass);
+        return SupportHelperKtx.INSTANCE.findFragment(getSupportFragmentManager(), fragmentClass);
     }
 }

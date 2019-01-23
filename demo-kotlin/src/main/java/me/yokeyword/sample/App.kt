@@ -4,6 +4,7 @@ import android.app.Application
 
 import me.yokeyword.fragmentation.Fragmentation
 import me.yokeyword.fragmentation.exception.AfterSaveStateTransactionWarning
+import me.yokeyword.fragmentation.helper.ExceptionHandler
 
 /**
  * Created by YoKey on 16/11/23.
@@ -29,10 +30,12 @@ class App : Application() {
              * 可以获取到[AfterSaveStateTransactionWarning]
              * 在遇到After onSaveInstanceState时，不会抛出异常，会回调到下面的ExceptionHandler
              */
-            .handleException {
-                // 以BugTags为例子: 把捕获到的 Exception 传到 BugTags 后台。
-                // BugTags.sendException(e);
-            }
+            .handleException(object : ExceptionHandler {
+                override fun onException(e: Exception) {
+                    // 以BugTags为例子: 把捕获到的 Exception 传到 BugTags 后台。
+                    // BugTags.sendException(e);
+                }
+            })
             .install()
     }
 }

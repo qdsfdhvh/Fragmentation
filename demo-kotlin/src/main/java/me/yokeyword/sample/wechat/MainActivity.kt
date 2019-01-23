@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import me.yokeyword.fragmentation.SupportActivity
-import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 import me.yokeyword.fragmentation.findFragment
 import me.yokeyword.fragmentation.loadRootFragment
@@ -33,7 +32,7 @@ class MainActivity : SupportActivity() {
 
     override fun onCreateFragmentAnimator(): FragmentAnimator {
         // 设置横向(和安卓4.x动画相同)
-        return DefaultHorizontalAnimator()
+        return FragmentAnimator.horizontalAnimator()
     }
 
     companion object {

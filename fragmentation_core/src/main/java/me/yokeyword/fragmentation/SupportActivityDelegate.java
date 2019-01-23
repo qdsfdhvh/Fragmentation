@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentationMagician;
 import android.view.MotionEvent;
 
-import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.fragmentation.debug.DebugStackDelegate;
 import me.yokeyword.fragmentation.queue.Action;
@@ -102,7 +101,7 @@ public class SupportActivityDelegate {
      * @return FragmentAnimator对象
      */
     public FragmentAnimator onCreateFragmentAnimator() {
-        return new DefaultVerticalAnimator();
+        return FragmentAnimator.Companion.verticalAnimator();
     }
 
     /**
@@ -155,7 +154,8 @@ public class SupportActivityDelegate {
                 }
 
                 // 获取activeFragment:即从栈顶开始 状态为show的那个Fragment
-                ISupportFragment activeFragment = SupportHelper.getActiveFragment(getSupportFragmentManager());
+//                ISupportFragment activeFragment = SupportHelper.getActiveFragment(getSupportFragmentManager());
+                ISupportFragment activeFragment = SupportHelperKtx.INSTANCE.getActiveFragment(getSupportFragmentManager(), null);
                 if (mTransactionDelegate.dispatchBackPressedEvent(activeFragment)) return;
 
                 mSupport.onBackPressedSupport();
@@ -296,6 +296,7 @@ public class SupportActivityDelegate {
     }
 
     private ISupportFragment getTopFragment() {
-        return SupportHelper.getTopFragment(getSupportFragmentManager());
+//        return SupportHelper.getTopFragment(getSupportFragmentManager());
+        return SupportHelperKtx.INSTANCE.getTopFragment(getSupportFragmentManager(), 0);
     }
 }

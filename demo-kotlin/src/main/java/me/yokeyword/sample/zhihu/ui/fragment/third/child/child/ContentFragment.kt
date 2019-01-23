@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import me.yokeyword.fragmentation.SupportFragment
-import me.yokeyword.fragmentation.anim.DefaultNoAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 import me.yokeyword.fragmentation.parentStart
 import me.yokeyword.sample.R
@@ -35,7 +34,7 @@ class ContentFragment : SupportFragment() {
     }
 
     override fun onCreateFragmentAnimator(): FragmentAnimator {
-        return DefaultNoAnimator()
+        return FragmentAnimator.noAnimator()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

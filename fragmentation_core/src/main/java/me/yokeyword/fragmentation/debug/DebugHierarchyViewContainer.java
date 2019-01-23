@@ -117,7 +117,7 @@ public class DebugHierarchyViewContainer extends ScrollView {
             childTvItem = getTextView(child, tempHierarchy);
             childTvItem.setTag(R.id.hierarchy, tempHierarchy);
 
-            final List<DebugFragmentRecord> childFragmentRecord = child.childFragmentRecord;
+            final List<DebugFragmentRecord> childFragmentRecord = child.getChildFragmentRecord();
             if (childFragmentRecord != null && childFragmentRecord.size() > 0) {
                 tempHierarchy++;
                 childTvItem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fragmentation_ic_right, 0, 0, 0);
@@ -185,7 +185,7 @@ public class DebugHierarchyViewContainer extends ScrollView {
         tvItem.setBackgroundDrawable(a.getDrawable(0));
         a.recycle();
 
-        tvItem.setText(fragmentRecord.fragmentName);
+        tvItem.setText(fragmentRecord.getFragmentName());
 
         return tvItem;
     }

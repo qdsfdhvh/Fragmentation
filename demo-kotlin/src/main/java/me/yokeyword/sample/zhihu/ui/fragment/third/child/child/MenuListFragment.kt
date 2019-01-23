@@ -9,7 +9,6 @@ import java.util.ArrayList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import me.yokeyword.fragmentation.SupportFragment
-import me.yokeyword.fragmentation.anim.DefaultNoAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 import me.yokeyword.sample.R
 import me.yokeyword.sample.zhihu.adapter.MenuAdapter
@@ -42,7 +41,7 @@ class MenuListFragment : SupportFragment() {
     }
 
     override fun onCreateFragmentAnimator(): FragmentAnimator {
-        return DefaultNoAnimator()
+        return FragmentAnimator.noAnimator()
     }
 
     private fun initView(view: View) {

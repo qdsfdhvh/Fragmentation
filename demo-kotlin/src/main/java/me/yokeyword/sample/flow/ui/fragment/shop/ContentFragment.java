@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import me.yokeyword.fragmentation.anim.DefaultNoAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.flow.base.MySupportFragment;
@@ -48,7 +47,8 @@ public class ContentFragment extends MySupportFragment {
 
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
-        return new DefaultNoAnimator();
+//        return new DefaultNoAnimator();
+        return FragmentAnimator.Companion.noAnimator();
     }
 
     @Nullable
