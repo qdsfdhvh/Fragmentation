@@ -44,5 +44,7 @@ ext.buildVersions = buildVersions
 static def addRepos(RepositoryHandler handler) {
     handler.google()
     handler.jcenter()
+    handler.mavenCentral()
+    handler.maven { url 'https://jitpack.io' }
 }
 ext.addRepos = this.&addRepos

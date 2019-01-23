@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka-android'
 
 android {
     compileSdkVersion buildVersions.targetSdk
@@ -17,9 +18,19 @@ android {
     androidExtensions {
         experimental = true
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     implementation deps.kotlin.stdlib
     api deps.support.appcompat
 }
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+apply from: rootProject.file('gradle/bintray.gradle')
