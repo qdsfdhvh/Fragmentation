@@ -118,16 +118,15 @@ object SupportHelperKtx {
     }
 
     fun getWillPopFragments(fm: FragmentManager, tag: String, includeTarget: Boolean): List<Fragment> {
-        val target = fm.findFragmentByTag(tag)
-
         val fragments = fm.getActiveFragments()
         if (fragments.isNullOrEmpty()) return emptyList()
 
+        val target = fm.findFragmentByTag(tag)
         val size = fragments.size
 
         var startIndex = -1
         for (i in size - 1 downTo 0) {
-            if (target === fragments[i]) {
+            if (target == fragments[i]) {
                 if (includeTarget) {
                     startIndex = i
                 }

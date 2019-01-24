@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import me.yokeyword.eventbusactivityscope.EventBusActivityScope
+import me.yokeyword.fragmentation.parentStart
 import me.yokeyword.sample.R
 import me.yokeyword.sample.wechat.adapter.ChatAdapter
 import me.yokeyword.sample.wechat.base.BaseMainFragment
@@ -78,7 +79,7 @@ class WechatFirstTabFragment : BaseMainFragment(), SwipeRefreshLayout.OnRefreshL
             // 因为启动的MsgFragment是MainFragment的兄弟Fragment,所以需要MainFragment.start()
 
             // 也可以像使用getParentFragment()的方式,拿到父Fragment来操作 或者使用 EventBusActivityScope
-            (parentFragment as MainFragment).startBrotherFragment(MsgFragment.newInstance(mAdapter!!.getMsg(position)))
+            parentStart(MsgFragment.newInstance(mAdapter!!.getMsg(position)))
         }
 
         val chatList = initDatas()

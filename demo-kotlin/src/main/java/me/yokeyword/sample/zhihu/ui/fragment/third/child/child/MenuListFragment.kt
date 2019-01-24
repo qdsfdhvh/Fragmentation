@@ -12,6 +12,7 @@ import me.yokeyword.fragmentation.SupportFragment
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 import me.yokeyword.sample.R
 import me.yokeyword.sample.zhihu.adapter.MenuAdapter
+import me.yokeyword.sample.zhihu.listener.OnItemClickListener
 import me.yokeyword.sample.zhihu.ui.fragment.third.child.ShopFragment
 
 /**
@@ -57,7 +58,11 @@ class MenuListFragment : SupportFragment() {
         mRecy!!.adapter = mAdapter
         mAdapter!!.setDatas(mMenus)
 
-        mAdapter!!.setOnItemClickListener { position, view, vh -> showContent(position) }
+        mAdapter!!.setOnItemClickListener(object : OnItemClickListener {
+            override fun onItemClick(position: Int, view: View, vh: RecyclerView.ViewHolder) {
+                showContent(position)
+            }
+        })
 
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(SAVE_STATE_POSITION)

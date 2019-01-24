@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.wechat_fragment_main.*
 import me.yokeyword.eventbusactivityscope.EventBusActivityScope
 import me.yokeyword.fragmentation.*
 import me.yokeyword.sample.R
@@ -19,9 +20,7 @@ import me.yokeyword.sample.wechat.ui.view.BottomBarTab
  */
 class MainFragment : SupportFragment() {
 
-    private val mFragments = arrayOfNulls<SupportFragment>(3)
-
-    private var mBottomBar: BottomBar? = null
+    private val mFragments: Array<ISupportFragment?> = arrayOfNulls(3)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.wechat_fragment_main, container, false)
@@ -37,14 +36,9 @@ class MainFragment : SupportFragment() {
             mFragments[SECOND] = WechatSecondTabFragment.newInstance()
             mFragments[THIRD] = WechatThirdTabFragment.newInstance()
 
-            loadRootFragments(R.id.fl_tab_container,
-                FIRST,
-                arrayOf(
-                    mFragments[FIRST],
-                    mFragments[SECOND],
-                    mFragments[THIRD]
-                )
-            )
+            loadRootFragments(R.id.fl_tab_container, FIRST, mFragments)
+//            loadMultipleRootFragment(R.id.fl_tab_container, FIRST, mFragments[FIRST],
+//                mFragments[SECOND], mFragments[THIRD])
         } else {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
 
@@ -56,21 +50,19 @@ class MainFragment : SupportFragment() {
     }
 
     private fun initView(view: View) {
-        mBottomBar = view.findViewById<View>(R.id.bottomBar) as BottomBar
-
-        mBottomBar!!
+        bottomBar
             .addItem(BottomBarTab(ctx, R.drawable.ic_message_white_24dp, getString(R.string.msg)))
             .addItem(BottomBarTab(ctx, R.drawable.ic_account_circle_white_24dp, getString(R.string.discover)))
             .addItem(BottomBarTab(ctx, R.drawable.ic_discover_white_24dp, getString(R.string.more)))
 
         // 模拟未读消息
-        mBottomBar!!.getItem(FIRST)!!.unreadCount = 9
+        bottomBar.getItem(FIRST)!!.unreadCount = 9
 
-        mBottomBar!!.setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
+        bottomBar.setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
             override fun onTabSelected(position: Int, prePosition: Int) {
                 showHideFragment(mFragments[position], mFragments[prePosition])
 
-                val tab = mBottomBar!!.getItem(FIRST)
+                val tab = bottomBar.getItem(FIRST)
                 if (position == FIRST) {
                     tab!!.unreadCount = 0
                 } else {
@@ -97,23 +89,14 @@ class MainFragment : SupportFragment() {
         }
     }
 
-    /**
-     * start other BrotherFragment
-     */
-    fun startBrotherFragment(targetFragment: SupportFragment) {
-        start(targetFragment)
-    }
-
     companion object {
-        private val REQ_MSG = 10
+        private const val REQ_MSG = 10
 
-        val FIRST = 0
-        val SECOND = 1
-        val THIRD = 2
-
+        const val FIRST = 0
+        const val SECOND = 1
+        const val THIRD = 2
 
         fun newInstance(): MainFragment {
-
             val args = Bundle()
 
             val fragment = MainFragment()

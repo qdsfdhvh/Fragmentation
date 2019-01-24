@@ -34,8 +34,8 @@ class MainActivity : SupportActivity(), BaseMainFragment.OnBackToFirstListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.zhihu_activity_main)
 
-        val zhiHu = findFragment(ZhiHuFirstFragment::class.java)
-        if (zhiHu == null) {
+        val first = findFragment(ZhiHuFirstFragment::class.java)
+        if (first == null) {
             mFragments[FIRST] = ZhiHuFirstFragment.newInstance()
             mFragments[SECOND] = ZhihuSecondFragment.newInstance()
             mFragments[THIRD] = ZhihuThirdFragment.newInstance()
@@ -46,7 +46,7 @@ class MainActivity : SupportActivity(), BaseMainFragment.OnBackToFirstListener {
             // 这里库已经做了Fragment恢复,所有不需要额外的处理了, 不会出现重叠问题
 
             // 这里我们需要拿到mFragments的引用
-            mFragments[FIRST] = zhiHu
+            mFragments[FIRST] = first
             mFragments[SECOND] = findFragment(ZhihuSecondFragment::class.java)
             mFragments[THIRD] = findFragment(ZhihuThirdFragment::class.java)
             mFragments[FOURTH] = findFragment(ZhihuFourthFragment::class.java)
@@ -71,7 +71,6 @@ class MainActivity : SupportActivity(), BaseMainFragment.OnBackToFirstListener {
             }
 
             override fun onTabReselected(position: Int) {
-                Log.d("TAG", "position = $position")
                 val currentFragment = mFragments[position] ?: return
                 val count = currentFragment.childFragmentManager.backStackEntryCount
 

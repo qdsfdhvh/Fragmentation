@@ -11,7 +11,6 @@ import me.yokeyword.fragmentation.ISupportActivity;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportActivityDelegate;
 import me.yokeyword.fragmentation.SupportFragment;
-import me.yokeyword.fragmentation.SupportHelper;
 import me.yokeyword.fragmentation.SupportHelperKtx;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 

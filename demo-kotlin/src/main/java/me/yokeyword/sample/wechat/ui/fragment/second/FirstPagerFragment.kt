@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import me.yokeyword.eventbusactivityscope.EventBusActivityScope
 import me.yokeyword.fragmentation.SupportFragment
+import me.yokeyword.fragmentation.parentStart
 import me.yokeyword.sample.R
 import me.yokeyword.sample.wechat.adapter.PagerAdapter
 import me.yokeyword.sample.wechat.event.TabSelectedEvent
@@ -59,7 +60,7 @@ class FirstPagerFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListen
 
         mAdapter!!.setOnItemClickListener { _, _, _ ->
             // 通知MainFragment跳转至NewFeatureFragment
-            (parentFragment!!.parentFragment as MainFragment).startBrotherFragment(NewFeatureFragment.newInstance())
+            parentStart(NewFeatureFragment.newInstance())
         }
 
         // Init Datas

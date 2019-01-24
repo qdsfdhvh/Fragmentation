@@ -27,6 +27,7 @@ import me.yokeyword.sample.zhihu.adapter.FirstHomeAdapter
 import me.yokeyword.sample.zhihu.entity.Article
 import me.yokeyword.sample.zhihu.event.TabSelectedEvent
 import me.yokeyword.sample.zhihu.helper.DetailTransition
+import me.yokeyword.sample.zhihu.listener.OnItemClickListener
 
 /**
  * Created by YoKeyword on 16/6/5.
@@ -81,27 +82,29 @@ class FirstHomeFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
         mRecy!!.layoutManager = manager
         mRecy!!.adapter = mAdapter
 
-        mAdapter!!.setOnItemClickListener { position, _, vh ->
-            val fragment = FirstDetailFragment.newInstance(mAdapter!!.getItem(position))
+        mAdapter!!.setOnItemClickListener(object : OnItemClickListener {
+            override fun onItemClick(position: Int, view: View, vh: RecyclerView.ViewHolder) {
+                val fragment = FirstDetailFragment.newInstance(mAdapter!!.getItem(position))
 
-            // 这里是使用SharedElement的用例
-            // LOLLIPOP(5.0)系统的 SharedElement支持有 系统BUG， 这里判断大于 > LOLLIPOP
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                exitTransition = Fade()
-                fragment.enterTransition = Fade()
-                fragment.sharedElementReturnTransition = DetailTransition()
-                fragment.sharedElementEnterTransition = DetailTransition()
+                // 这里是使用SharedElement的用例
+                // LOLLIPOP(5.0)系统的 SharedElement支持有 系统BUG， 这里判断大于 > LOLLIPOP
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                    exitTransition = Fade()
+                    fragment.enterTransition = Fade()
+                    fragment.sharedElementReturnTransition = DetailTransition()
+                    fragment.sharedElementEnterTransition = DetailTransition()
 
-                // 25.1.0以下的support包,Material过渡动画只有在进栈时有,返回时没有;
-                // 25.1.0+的support包，SharedElement正常
-                extraTransaction()
-                    .addSharedElement((vh as FirstHomeAdapter.VH).img, getString(R.string.image_transition))
-                    .addSharedElement(vh.tvTitle, "tv")
-                    .start(fragment)
-            } else {
-                start(fragment)
+                    // 25.1.0以下的support包,Material过渡动画只有在进栈时有,返回时没有;
+                    // 25.1.0+的support包，SharedElement正常
+                    extraTransaction()
+                        .addSharedElement((vh as FirstHomeAdapter.VH).img, getString(R.string.image_transition))
+                        .addSharedElement(vh.tvTitle, "tv")
+                        .start(fragment)
+                } else {
+                    start(fragment)
+                }
             }
-        }
+        })
 
         // Init Datas
         val articleList = ArrayList<Article>()

@@ -20,9 +20,20 @@ fun ISupportFragment.loadRootFragment(containerId: Int,
  * @param showPosition 默认显示第x个fragment
  * @param fragments 待添加的fragments
  */
-fun <T: ISupportFragment> ISupportFragment.loadRootFragments(containerId: Int,
-                                       showPosition: Int,
-                                       fragments: Array<T?>) {
+fun <T : ISupportFragment> ISupportFragment.loadRootFragments(containerId: Int,
+                                                             showPosition: Int,
+                                                             fragments: Array<T?>) {
+    supportDelegate.loadMultipleRootFragment(containerId, showPosition, *fragments)
+}
+
+/**
+ * @param containerId 所依赖的控件id
+ * @param showPosition 默认显示第x个fragment
+ * @param fragments 待添加的fragments
+ */
+fun <T : ISupportFragment> ISupportFragment.loadMultipleRootFragment(containerId: Int,
+                                                                    showPosition: Int,
+                                                                    vararg fragments: T?) {
     supportDelegate.loadMultipleRootFragment(containerId, showPosition, *fragments)
 }
 

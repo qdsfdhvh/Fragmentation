@@ -9,6 +9,7 @@ import java.util.ArrayList
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import me.yokeyword.fragmentation.parentStart
 import me.yokeyword.sample.R
 import me.yokeyword.sample.wechat.adapter.HomeAdapter
 import me.yokeyword.sample.wechat.base.BaseMainFragment
@@ -50,9 +51,8 @@ class WechatThirdTabFragment : BaseMainFragment() {
         mRecy!!.adapter = mAdapter
 
         mAdapter!!.setOnItemClickListener { position, _, _ ->
-            (parentFragment as MainFragment).startBrotherFragment(DetailFragment.newInstance(mAdapter!!.getItem(position).title))
             // 或者使用EventBus
-            //                EventBusActivityScope.getDefault(_mActivity).post(new StartBrotherEvent(DetailFragment.newInstance(mAdapter.getItem(position).getTitle())));
+            parentStart(DetailFragment.newInstance(mAdapter!!.getItem(position).title))
         }
 
         // Init Datas
@@ -67,7 +67,6 @@ class WechatThirdTabFragment : BaseMainFragment() {
     companion object {
 
         fun newInstance(): WechatThirdTabFragment {
-
             val args = Bundle()
 
             val fragment = WechatThirdTabFragment()

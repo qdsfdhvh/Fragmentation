@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentActivity;
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragmentDelegate;
-import me.yokeyword.fragmentation.SupportHelper;
 import me.yokeyword.fragmentation.SupportHelperKtx;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
