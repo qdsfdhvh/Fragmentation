@@ -38,8 +38,9 @@ public class SupportActivityDelegate {
      * Perform some extra transactions.
      * 额外的事务：自定义Tag，添加SharedElement动画，操作非回退栈Fragment
      */
-    public ExtraTransaction extraTransaction() {
-        return new ExtraTransaction.ExtraTransactionImpl<>((FragmentActivity) mSupport, getTopFragment(), getTransactionDelegate(), true);
+    public ExtraTransactionKtx extraTransaction() {
+//        return new ExtraTransaction.ExtraTransactionImpl<>((FragmentActivity) mSupport, getTopFragment(), getTransactionDelegate(), true);
+        return new ExtraTransactionKtxImpl(mActivity, getTopFragment(), getTransactionDelegate(), true);
     }
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class SupportActivityDelegate {
         mDebugStackDelegate = new DebugStackDelegate(mActivity);
 
         mFragmentAnimator = mSupport.onCreateFragmentAnimator();
-        mDebugStackDelegate.onCreate(Fragmentation.getDefault().getMode());
+        mDebugStackDelegate.onCreate(Fragmentation.Companion.getDefault().getMode());
     }
 
     public TransactionDelegate getTransactionDelegate() {
@@ -58,7 +59,7 @@ public class SupportActivityDelegate {
     }
 
     public void onPostCreate(@Nullable Bundle savedInstanceState) {
-        mDebugStackDelegate.onPostCreate(Fragmentation.getDefault().getMode());
+        mDebugStackDelegate.onPostCreate(Fragmentation.Companion.getDefault().getMode());
     }
 
     /**
@@ -146,7 +147,7 @@ public class SupportActivityDelegate {
      * 不建议复写该方法,请使用 {@link #onBackPressedSupport} 代替
      */
     public void onBackPressed() {
-        mTransactionDelegate.mActionQueue.enqueue(new Action(Action.ACTION_BACK) {
+        mTransactionDelegate.mActionQueue.enqueue(new Action(Action.Type.BACK) {
             @Override
             public void run() {
                 if (!mFragmentClickable) {

@@ -29,13 +29,11 @@ abstract class SupportActivity: AppCompatActivity(), ISupportActivity {
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         return delegate.dispatchTouchEvent(ev)
-//                || dispatchTouchEventEvent(SupportHelper.getActiveFragment(supportFragmentManager), ev)
                 || dispatchTouchEventEvent(SupportHelperKtx.getActiveFragment(supportFragmentManager), ev)
                 || dispatchTouchEventSupport(ev)
     }
 
     override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-//        return dispatchKeyEvent(SupportHelper.getActiveFragment(supportFragmentManager), event)
         return dispatchKeyEvent(SupportHelperKtx.getActiveFragment(supportFragmentManager), event)
                 || dispatchKeyEventSupport(event)
     }
@@ -68,7 +66,7 @@ abstract class SupportActivity: AppCompatActivity(), ISupportActivity {
         return delegate
     }
 
-    override fun extraTransaction(): ExtraTransaction {
+    override fun extraTransaction(): ExtraTransactionKtx {
         return delegate.extraTransaction()
     }
 

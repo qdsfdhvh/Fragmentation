@@ -40,9 +40,10 @@ fun <T : ISupportFragment> ISupportFragment.loadMultipleRootFragment(containerId
 /**
  * 跳转到指定fragment
  * @param to 跳转到此fragment
+ * @param mode 启动类型
  */
-fun ISupportFragment.start(to: ISupportFragment) {
-    supportDelegate.start(to)
+fun ISupportFragment.start(to: ISupportFragment, @ISupportFragment.LaunchMode mode: Int = ISupportFragment.STANDARD) {
+    supportDelegate.start(to, mode)
 }
 
 /**
@@ -50,7 +51,7 @@ fun ISupportFragment.start(to: ISupportFragment) {
  * @param to 跳转到此fragment
  * @param requestCode 返回code
  */
-fun ISupportFragment.start(to: ISupportFragment, requestCode: Int) {
+fun ISupportFragment.startForResult(to: ISupportFragment, requestCode: Int) {
     supportDelegate.startForResult(to, requestCode)
 }
 
@@ -152,7 +153,60 @@ fun ISupportFragment.parentStart(to: ISupportFragment) {
 
 /**
  * 替换fragment
+ * @param to 待替换的fragment
+ * @param addToBackStack 是否保存到栈
  */
-fun ISupportFragment.replaceFragment(to: ISupportFragment, addToBackStack: Boolean) {
+fun ISupportFragment.replaceFragment(to: ISupportFragment, addToBackStack: Boolean = false) {
     supportDelegate.replaceFragment(to, addToBackStack)
+}
+
+//
+
+fun <T : ISupportFragment> ISupportFragment.startWithPopTo(to: ISupportFragment,
+                                                           clazz: Class<T>,
+                                                           includeTargetFragment: Boolean) {
+    supportDelegate.startWithPopTo(to, clazz, includeTargetFragment)
+}
+
+/**
+ * 子级跳转到指定fragment
+ * @param to 跳转到此fragment
+ * @param mode 启动类型
+ */
+fun ISupportFragment.startChild(to: ISupportFragment, @ISupportFragment.LaunchMode mode: Int = ISupportFragment.STANDARD) {
+    supportDelegate.startChild(to, mode)
+}
+
+/**
+ * 子级跳转到指定fragment，按需要指定requestCode
+ * @param to 跳转到此fragment
+ * @param requestCode 返回code
+ */
+fun ISupportFragment.startChildForResult(to: ISupportFragment, requestCode: Int) {
+    supportDelegate.startChildForResult(to, requestCode)
+}
+
+/**
+ * 子级跳转到指定fragment，并关闭当前的fragment
+ * @param to 跳转到此fragment
+ */
+fun ISupportFragment.startChildWithPop(to: ISupportFragment) {
+    supportDelegate.startChildWithPop(to)
+}
+
+/**
+ * 替换fragment
+ * @param to 待替换的fragment
+ * @param addToBackStack 是否保存到栈
+ */
+fun ISupportFragment.replaceChildFragment(to: ISupportFragment, addToBackStack: Boolean = false) {
+    supportDelegate.replaceChildFragment(to, addToBackStack)
+}
+
+fun ISupportFragment.popQuiet() {
+    supportDelegate.popQuiet()
+}
+
+fun ISupportFragment.a() {
+    supportDelegate
 }

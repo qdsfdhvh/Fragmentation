@@ -143,7 +143,7 @@ abstract class SupportFragment: Fragment(), ISupportFragment {
         return delegate
     }
 
-    override fun extraTransaction(): ExtraTransaction {
+    override fun extraTransaction(): ExtraTransactionKtx {
         return delegate.extraTransaction()
     }
 

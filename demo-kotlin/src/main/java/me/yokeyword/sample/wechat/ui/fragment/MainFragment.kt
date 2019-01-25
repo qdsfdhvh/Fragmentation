@@ -1,6 +1,7 @@
 package me.yokeyword.sample.wechat.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import kotlinx.android.synthetic.main.wechat_fragment_main.*
 import me.yokeyword.eventbusactivityscope.EventBusActivityScope
 import me.yokeyword.fragmentation.*
 import me.yokeyword.sample.R
+import me.yokeyword.sample.base.BaseFragment
 import me.yokeyword.sample.wechat.event.TabSelectedEvent
 import me.yokeyword.sample.wechat.ui.fragment.first.WechatFirstTabFragment
 import me.yokeyword.sample.wechat.ui.fragment.second.WechatSecondTabFragment
@@ -18,18 +20,12 @@ import me.yokeyword.sample.wechat.ui.view.BottomBarTab
 /**
  * Created by YoKeyword on 16/6/30.
  */
-class MainFragment : SupportFragment() {
+class MainFragment : BaseFragment() {
 
     private val mFragments: Array<ISupportFragment?> = arrayOfNulls(3)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.wechat_fragment_main, container, false)
-        initView(view)
-        return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val firstFragment = findChildFragment(WechatFirstTabFragment::class.java)
         if (firstFragment == null) {
             mFragments[FIRST] = WechatFirstTabFragment.newInstance()
@@ -47,16 +43,17 @@ class MainFragment : SupportFragment() {
             mFragments[SECOND] = findChildFragment(WechatSecondTabFragment::class.java)
             mFragments[THIRD] = findChildFragment(WechatThirdTabFragment::class.java)
         }
+        initView()
     }
 
-    private fun initView(view: View) {
+    private fun initView() {
         bottomBar
             .addItem(BottomBarTab(ctx, R.drawable.ic_message_white_24dp, getString(R.string.msg)))
             .addItem(BottomBarTab(ctx, R.drawable.ic_account_circle_white_24dp, getString(R.string.discover)))
             .addItem(BottomBarTab(ctx, R.drawable.ic_discover_white_24dp, getString(R.string.more)))
 
         // 模拟未读消息
-        bottomBar.getItem(FIRST)!!.unreadCount = 9
+        bottomBar.getItem(FIRST).unreadCount = 9
 
         bottomBar.setOnTabSelectedListener(object : BottomBar.OnTabSelectedListener {
             override fun onTabSelected(position: Int, prePosition: Int) {
@@ -88,6 +85,8 @@ class MainFragment : SupportFragment() {
 
         }
     }
+
+    override fun getLayoutId() = R.layout.wechat_fragment_main
 
     companion object {
         private const val REQ_MSG = 10

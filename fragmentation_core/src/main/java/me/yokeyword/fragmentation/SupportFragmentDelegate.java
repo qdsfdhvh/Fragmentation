@@ -71,11 +71,12 @@ public class SupportFragmentDelegate {
      * Perform some extra transactions.
      * 额外的事务：自定义Tag，添加SharedElement动画，操作非回退栈Fragment
      */
-    public ExtraTransaction extraTransaction() {
+    public ExtraTransactionKtx extraTransaction() {
         if (mTransactionDelegate == null)
             throw new RuntimeException(mFragment.getClass().getSimpleName() + " not attach!");
 
-        return new ExtraTransaction.ExtraTransactionImpl<>((FragmentActivity) mSupport, mSupportF, mTransactionDelegate, false);
+//        return new ExtraTransaction.ExtraTransactionImpl<>((FragmentActivity) mSupport, mSupportF, mTransactionDelegate, false);
+        return new ExtraTransactionKtxImpl((FragmentActivity) mSupport, mSupportF, mTransactionDelegate,false);
     }
 
     public void onAttach(Activity activity) {
@@ -191,7 +192,7 @@ public class SupportFragmentDelegate {
     }
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        getVisibleDelegate().onActivityCreated(savedInstanceState);
+        getVisibleDelegate().onActivityCreated();
 
         View view = mFragment.getView();
         if (view != null) {

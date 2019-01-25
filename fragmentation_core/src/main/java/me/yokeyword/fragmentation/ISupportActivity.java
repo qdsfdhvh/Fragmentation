@@ -9,9 +9,10 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  */
 
 public interface ISupportActivity {
+
     SupportActivityDelegate getSupportDelegate();
 
-    ExtraTransaction extraTransaction();
+    ExtraTransactionKtx extraTransaction();
 
     FragmentAnimator getFragmentAnimator();
 

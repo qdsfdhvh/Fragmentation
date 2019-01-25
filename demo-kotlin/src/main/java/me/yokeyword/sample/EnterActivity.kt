@@ -28,5 +28,8 @@ class EnterActivity : AppCompatActivity() {
         btn_zhihu.setOnClickListener {
             me.yokeyword.sample.zhihu.MainActivity.newInstance(this)
         }
+        runOnUiThread {
+
+        }
     }
 }

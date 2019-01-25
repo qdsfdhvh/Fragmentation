@@ -23,17 +23,17 @@ android {
         versionName gitLatestTag()
     }
     signingConfigs {
-        releaseConfig {
-            storeFile file("./fragmentation.jks")
-            storePassword System.getenv("KEYSTORE_PASS")
-            keyAlias System.getenv("ALIAS_NAME")
-            keyPassword System.getenv("ALIAS_PASS")
-        }
+//        releaseConfig {
+//            storeFile file("./fragmentation.jks")
+//            storePassword System.getenv("KEYSTORE_PASS")
+//            keyAlias System.getenv("ALIAS_NAME")
+//            keyPassword System.getenv("ALIAS_PASS")
+//        }
     }
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.releaseConfig
+//            signingConfig signingConfigs.releaseConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

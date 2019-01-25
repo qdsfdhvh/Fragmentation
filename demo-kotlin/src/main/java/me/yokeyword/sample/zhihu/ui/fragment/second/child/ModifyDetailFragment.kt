@@ -1,17 +1,10 @@
 package me.yokeyword.sample.zhihu.ui.fragment.second.child
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_modify_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
 import me.yokeyword.fragmentation.ISupportFragment
-import me.yokeyword.fragmentation.SupportFragment
 import me.yokeyword.fragmentation.hideSoftInput
 import me.yokeyword.fragmentation.start
 import me.yokeyword.sample.R

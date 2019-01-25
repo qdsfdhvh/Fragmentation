@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.yokeyword.fragmentation.Fragmentation;
+import me.yokeyword.fragmentation.Fragmentation.StackViewMode;
 import me.yokeyword.fragmentation.R;
 
 /**
@@ -40,16 +40,16 @@ public class DebugStackDelegate implements SensorEventListener {
         this.mActivity = activity;
     }
 
-    public void onCreate(int mode) {
-        if (mode != Fragmentation.SHAKE) return;
+    public void onCreate(StackViewMode mode) {
+        if (mode != StackViewMode.SHAKE) return;
         mSensorManager = (SensorManager) mActivity.getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public void onPostCreate(int mode) {
-        if (mode != Fragmentation.BUBBLE) return;
+    public void onPostCreate(StackViewMode mode) {
+        if (mode != StackViewMode.BUBBLE) return;
         View root = mActivity.findViewById(android.R.id.content);
         if (root instanceof FrameLayout) {
             FrameLayout content = (FrameLayout) root;

@@ -9,6 +9,7 @@ public interface ISwipeBackActivity {
 
     SwipeBackLayout getSwipeBackLayout();
 
+
     void setSwipeBackEnable(boolean enable);
 
     void setEdgeLevel(SwipeBackLayout.EdgeLevel edgeLevel);

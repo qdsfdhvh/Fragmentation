@@ -6,12 +6,7 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import me.yokeyword.fragmentation.ExtraTransaction;
-import me.yokeyword.fragmentation.ISupportActivity;
-import me.yokeyword.fragmentation.ISupportFragment;
-import me.yokeyword.fragmentation.SupportActivityDelegate;
-import me.yokeyword.fragmentation.SupportFragment;
-import me.yokeyword.fragmentation.SupportHelperKtx;
+import me.yokeyword.fragmentation.*;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
@@ -31,7 +26,7 @@ public abstract class MySupportActivity extends AppCompatActivity implements ISu
      * 额外的事务：自定义Tag，添加SharedElement动画，操作非回退栈Fragment
      */
     @Override
-    public ExtraTransaction extraTransaction() {
+    public ExtraTransactionKtx extraTransaction() {
         return mDelegate.extraTransaction();
     }
 

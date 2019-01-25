@@ -30,7 +30,7 @@ import me.yokeyword.fragmentation.queue.ActionQueue;
  * Controller
  * Created by YoKeyword on 16/1/22.
  */
-class TransactionDelegate {
+public class TransactionDelegate {
     static final int DEFAULT_POPTO_ANIM = Integer.MAX_VALUE;
 
     private static final String TAG = "Fragmentation";
@@ -80,7 +80,7 @@ class TransactionDelegate {
     }
 
     void loadRootTransaction(final FragmentManager fm, final int containerId, final ISupportFragment to, final boolean addToBackStack, final boolean allowAnimation) {
-        enqueue(fm, new Action(Action.ACTION_LOAD) {
+        enqueue(fm, new Action(Action.Type.LOAD) {
             @Override
             public void run() {
                 bindContainerId(containerId, to);
@@ -88,8 +88,12 @@ class TransactionDelegate {
                 String toFragmentTag = to.getClass().getName();
                 TransactionRecord transactionRecord = to.getSupportDelegate().mTransactionRecord;
                 if (transactionRecord != null) {
-                    if (transactionRecord.tag != null) {
-                        toFragmentTag = transactionRecord.tag;
+//                    if (transactionRecord.tag != null) {
+//                        toFragmentTag = transactionRecord.tag;
+//                    }
+
+                    if (transactionRecord.getTag() != null) {
+                        toFragmentTag = transactionRecord.getTag();
                     }
                 }
 
@@ -99,7 +103,7 @@ class TransactionDelegate {
     }
 
     void loadMultipleRootTransaction(final FragmentManager fm, final int containerId, final int showPosition, final ISupportFragment... tos) {
-        enqueue(fm, new Action(Action.ACTION_LOAD) {
+        enqueue(fm, new Action(Action.Type.LOAD) {
             @Override
             public void run() {
                 FragmentTransaction ft = fm.beginTransaction();
@@ -127,7 +131,7 @@ class TransactionDelegate {
      * Dispatch the start transaction.
      */
     void dispatchStartTransaction(final FragmentManager fm, final ISupportFragment from, final ISupportFragment to, final int requestCode, final int launchMode, final int type) {
-        enqueue(fm, new Action(launchMode == ISupportFragment.SINGLETASK ? Action.ACTION_POP_MOCK : Action.ACTION_NORMAL) {
+        enqueue(fm, new Action(launchMode == ISupportFragment.SINGLETASK ? Action.Type.POP_MOCK : Action.Type.NORMAL) {
             @Override
             public void run() {
                 doDispatchStartTransaction(fm, from, to, requestCode, launchMode, type);
@@ -151,7 +155,7 @@ class TransactionDelegate {
      * Start the target Fragment and pop itself
      */
     void startWithPop(final FragmentManager fm, final ISupportFragment from, final ISupportFragment to) {
-        enqueue(fm, new Action(Action.ACTION_POP_MOCK) {
+        enqueue(fm, new Action(Action.Type.POP_MOCK) {
             @Override
             public void run() {
                 ISupportFragment top = getTopFragmentForStart(from, fm);
@@ -187,7 +191,7 @@ class TransactionDelegate {
     }
 
     void startWithPopTo(final FragmentManager fm, final ISupportFragment from, final ISupportFragment to, final String fragmentTag, final boolean includeTargetFragment) {
-        enqueue(fm, new Action(Action.ACTION_POP_MOCK) {
+        enqueue(fm, new Action(Action.Type.POP_MOCK) {
             @Override
             public void run() {
                 int flag = 0;
@@ -230,7 +234,7 @@ class TransactionDelegate {
      * Remove
      */
     void remove(final FragmentManager fm, final Fragment fragment, final boolean showPreFragment) {
-        enqueue(fm, new Action(Action.ACTION_POP, fm) {
+        enqueue(fm, new Action(Action.Type.POP, fm) {
             @Override
             public void run() {
                 FragmentTransaction ft = fm.beginTransaction()
@@ -253,7 +257,7 @@ class TransactionDelegate {
      * Pop
      */
     void pop(final FragmentManager fm) {
-        enqueue(fm, new Action(Action.ACTION_POP, fm) {
+        enqueue(fm, new Action(Action.Type.POP, fm) {
             @Override
             public void run() {
                 handleAfterSaveInStateTransactionException(fm, "pop()");
@@ -279,7 +283,7 @@ class TransactionDelegate {
     }
 
     void popQuiet(final FragmentManager fm) {
-        enqueue(fm, new Action(Action.ACTION_POP_MOCK) {
+        enqueue(fm, new Action(Action.Type.POP_MOCK) {
             @Override
             public void run() {
                 mSupport.getSupportDelegate().mPopMultipleNoAnim = true;
@@ -298,7 +302,7 @@ class TransactionDelegate {
      * @param includeTargetFragment Whether it includes targetFragment
      */
     void popTo(final String targetFragmentTag, final boolean includeTargetFragment, final Runnable afterPopTransactionRunnable, final FragmentManager fm, final int popAnim) {
-        enqueue(fm, new Action(Action.ACTION_POP_MOCK) {
+        enqueue(fm, new Action(Action.Type.POP_MOCK) {
             @Override
             public void run() {
                 doPopTo(targetFragmentTag, includeTargetFragment, fm, popAnim);
@@ -379,15 +383,25 @@ class TransactionDelegate {
         ArrayList<TransactionRecord.SharedElement> sharedElementList = null;
         TransactionRecord transactionRecord = to.getSupportDelegate().mTransactionRecord;
         if (transactionRecord != null) {
-            if (transactionRecord.tag != null) {
-                toFragmentTag = transactionRecord.tag;
+//            if (transactionRecord.tag != null) {
+//                toFragmentTag = transactionRecord.tag;
+//            }
+//            dontAddToBackStack = transactionRecord.dontAddToBackStack;
+//            if (transactionRecord.sharedElementList != null) {
+//                sharedElementList = transactionRecord.sharedElementList;
+//                // Compat SharedElement
+//                FragmentationMagician.reorderIndices(fm);
+//            }
+
+            if (transactionRecord.getTag() != null) {
+                toFragmentTag = transactionRecord.getTag();
             }
-            dontAddToBackStack = transactionRecord.dontAddToBackStack;
-            if (transactionRecord.sharedElementList != null) {
-                sharedElementList = transactionRecord.sharedElementList;
-                // Compat SharedElement
+            dontAddToBackStack = transactionRecord.getDontAddToBackStack();
+            if (!transactionRecord.getSharedElementList().isEmpty()) {
+                sharedElementList = transactionRecord.getSharedElementList();
                 FragmentationMagician.reorderIndices(fm);
             }
+
         }
 
         if (handleLaunchMode(fm, from, to, toFragmentTag, launchMode)) return;
@@ -425,13 +439,26 @@ class TransactionDelegate {
         if (sharedElementList == null) {
             if (addMode) { // Replace mode forbidden animation, the replace animations exist overlapping Bug on support-v4.
                 TransactionRecord record = to.getSupportDelegate().mTransactionRecord;
-                if (record != null && record.targetFragmentEnter != Integer.MIN_VALUE) {
-                    ft.setCustomAnimations(record.targetFragmentEnter, record.currentFragmentPopExit,
-                            record.currentFragmentPopEnter, record.targetFragmentExit);
-                    args.putInt(FRAGMENTATION_ARG_CUSTOM_ENTER_ANIM, record.targetFragmentEnter);
-                    args.putInt(FRAGMENTATION_ARG_CUSTOM_EXIT_ANIM, record.targetFragmentExit);
-                    args.putInt(FRAGMENTATION_ARG_CUSTOM_POP_EXIT_ANIM, record.currentFragmentPopExit);
-                } else {
+//                if (record != null && record.targetFragmentEnter != Integer.MIN_VALUE) {
+//
+//                    ft.setCustomAnimations(record.targetFragmentEnter, record.currentFragmentPopExit,
+//                            record.currentFragmentPopEnter, record.targetFragmentExit);
+//
+//                    args.putInt(FRAGMENTATION_ARG_CUSTOM_ENTER_ANIM, record.targetFragmentEnter);
+//                    args.putInt(FRAGMENTATION_ARG_CUSTOM_EXIT_ANIM, record.targetFragmentExit);
+//                    args.putInt(FRAGMENTATION_ARG_CUSTOM_POP_EXIT_ANIM, record.currentFragmentPopExit);
+//
+//                }
+                if (record != null && record.getTargetFragmentEnter() != Integer.MIN_VALUE) {
+                    ft.setCustomAnimations(record.getTargetFragmentEnter(),
+                            record.getCurrentFragmentPopExit(),
+                            record.getCurrentFragmentPopExit(),
+                            record.getTargetFragmentExit());
+                    args.putInt(FRAGMENTATION_ARG_CUSTOM_ENTER_ANIM, record.getTargetFragmentEnter());
+                    args.putInt(FRAGMENTATION_ARG_CUSTOM_EXIT_ANIM, record.getTargetFragmentExit());
+                    args.putInt(FRAGMENTATION_ARG_CUSTOM_POP_EXIT_ANIM, record.getCurrentFragmentPopExit());
+                }
+                else {
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 }
             } else {
@@ -440,7 +467,8 @@ class TransactionDelegate {
         } else {
             args.putBoolean(FRAGMENTATION_ARG_IS_SHARED_ELEMENT, true);
             for (TransactionRecord.SharedElement item : sharedElementList) {
-                ft.addSharedElement(item.sharedElement, item.sharedName);
+//                ft.addSharedElement(item.sharedElement, item.sharedName);
+                ft.addSharedElement(item.getSharedElement(), item.getSharedName());
             }
         }
         if (from == null) {
@@ -725,8 +753,8 @@ class TransactionDelegate {
         boolean stateSaved = FragmentationMagician.isStateSaved(fm);
         if (stateSaved) {
             AfterSaveStateTransactionWarning e = new AfterSaveStateTransactionWarning(action);
-            if (Fragmentation.getDefault().getHandler() != null) {
-                Fragmentation.getDefault().getHandler().onException(e);
+            if (Fragmentation.Companion.getDefault().getHandler() != null) {
+                Fragmentation.Companion.getDefault().getHandler().onException(e);
             }
         }
     }

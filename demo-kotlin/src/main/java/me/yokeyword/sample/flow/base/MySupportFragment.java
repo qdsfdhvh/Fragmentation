@@ -9,7 +9,7 @@ import android.view.animation.Animation;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import me.yokeyword.fragmentation.ExtraTransaction;
+import me.yokeyword.fragmentation.ExtraTransactionKtx;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragmentDelegate;
 import me.yokeyword.fragmentation.SupportHelperKtx;
@@ -33,7 +33,7 @@ public class MySupportFragment extends Fragment implements ISupportFragment {
      * 额外的事务：自定义Tag，添加SharedElement动画，操作非回退栈Fragment
      */
     @Override
-    public ExtraTransaction extraTransaction() {
+    public ExtraTransactionKtx extraTransaction() {
         return mDelegate.extraTransaction();
     }
 
