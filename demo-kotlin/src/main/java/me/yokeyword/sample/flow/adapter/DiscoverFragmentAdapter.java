@@ -21,11 +21,11 @@ public class DiscoverFragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return PagerChildFragment.newInstance(0);
+            return PagerChildFragment.Companion.newInstance(0);
         } else if (position == 1) {
-            return PagerChildFragment.newInstance(1);
+            return PagerChildFragment.Companion.newInstance(1);
         } else {
-            return PagerChildFragment.newInstance(2);
+            return PagerChildFragment.Companion.newInstance(2);
         }
     }
 

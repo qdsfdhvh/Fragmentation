@@ -61,7 +61,7 @@ public class TransactionDelegate {
 
     private Handler mHandler;
 
-    ActionQueue mActionQueue;
+    private ActionQueue mActionQueue;
 
     TransactionDelegate(ISupportActivity support) {
         this.mSupport = support;
@@ -286,11 +286,11 @@ public class TransactionDelegate {
         enqueue(fm, new Action(Action.Type.POP_MOCK) {
             @Override
             public void run() {
-                mSupport.getSupportDelegate().mPopMultipleNoAnim = true;
+                mSupport.getSupportDelegate().setPopMultipleNoAnim(true);
                 removeTopFragment(fm);
                 FragmentationMagician.popBackStackAllowingStateLoss(fm);
                 FragmentationMagician.executePendingTransactionsAllowingStateLoss(fm);
-                mSupport.getSupportDelegate().mPopMultipleNoAnim = false;
+                mSupport.getSupportDelegate().setPopMultipleNoAnim(false);
             }
         });
     }
@@ -344,6 +344,10 @@ public class TransactionDelegate {
         } catch (IllegalStateException ignored) {
             // Fragment no longer exists
         }
+    }
+
+    void enqueue(Action action) {
+        mActionQueue.enqueue(action);
     }
 
     private void enqueue(FragmentManager fm, Action action) {
@@ -609,7 +613,7 @@ public class TransactionDelegate {
     }
 
     private void safePopTo(String fragmentTag, final FragmentManager fm, int flag, List<Fragment> willPopFragments) {
-        mSupport.getSupportDelegate().mPopMultipleNoAnim = true;
+        mSupport.getSupportDelegate().setPopMultipleNoAnim(true);
 
         FragmentTransaction transaction = fm.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
@@ -620,7 +624,7 @@ public class TransactionDelegate {
 
         FragmentationMagician.popBackStackAllowingStateLoss(fm, fragmentTag, flag);
         FragmentationMagician.executePendingTransactionsAllowingStateLoss(fm);
-        mSupport.getSupportDelegate().mPopMultipleNoAnim = false;
+        mSupport.getSupportDelegate().setPopMultipleNoAnim(false);
 
         if (FragmentationMagician.isSupportLessThan25dot4()) {
             mHandler.post(new Runnable() {

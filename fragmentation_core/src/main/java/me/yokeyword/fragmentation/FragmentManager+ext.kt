@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentationMagician
 import me.yokeyword.fragmentation.exception.AfterSaveStateTransactionWarning
 
-internal fun FragmentManager?.getActiveFragments(): List<Fragment>? {
+internal fun FragmentManager?.getActiveFragments(): List<Fragment?>? {
     if (this == null) return null
     return FragmentationMagician.getActiveFragments(this)
 }
@@ -17,32 +17,7 @@ internal fun FragmentManager?.getISupportFragments(): List<ISupportFragment>? {
         ?.map { it as ISupportFragment }
 }
 
-internal fun FragmentManager?.getActiveFragment(parent: ISupportFragment? = null): ISupportFragment? {
-    if (this == null) return null
-
-    val fragments = getActiveFragments()
-    if (fragments.isNullOrEmpty()) return parent
-
-    for (fa in fragments.reversed()) {
-        if (fa is ISupportFragment && fa.isResumed && !fa.isHidden && fa.userVisibleHint) {
-            return fa.getChildActiveFragment()
-        }
-    }
-    return parent
-}
-
-internal fun FragmentManager?.getTopFragment(containerId: Int = 0): ISupportFragment? {
-    val fragments = getISupportFragments()
-    if (fragments.isNullOrEmpty()) return null
-
-    for (fa in fragments.reversed()) {
-        if (containerId == 0) return fa
-        if (fa.supportDelegate.mContainerId == containerId) return fa
-    }
-    return null
-}
-
-internal fun FragmentManager?.getBackStackTopFragment(containerId: Int): ISupportFragment? {
+internal fun FragmentManager?.getBackStackTopFragment(containerId: Int = 0): ISupportFragment? {
     if (this == null) return null
 
     val count = backStackEntryCount
@@ -81,32 +56,29 @@ internal fun FragmentManager?.getWillPopFragments(tag: String, includeTarget: Bo
     if (fragments.isNullOrEmpty()) return emptyList()
 
     val target = findFragmentByTag(tag)
-    val reversed = fragments.asReversed()
 
-    val index = reversed.indexOf(target)
-    val startIndex = when {
-        includeTarget -> index
-        index + 1 < fragments.size -> index + 1
-        else -> -1
+    val size = fragments.size
+    var startIndex = -1
+    for (i in size - 1 downTo 0) {
+        if (target == fragments[i]) {
+            if (includeTarget) {
+                startIndex = i
+            } else if (i + 1 < size) {
+                startIndex = i + 1
+            }
+            break
+        }
     }
     if (startIndex == -1) return emptyList()
 
-    return reversed.filter { it.view != null }
-}
-
-
-@Suppress("UNCHECKED_CAST")
-internal fun <T : ISupportFragment> FragmentManager?.findFragment(clazz: Class<T>): T? {
-    val fragments = getISupportFragments()
-    if (fragments.isNullOrEmpty()) return null
-
-    return fragments.firstOrNull { it.javaClass.name == clazz.name } as? T
-}
-
-@Suppress("UNCHECKED_CAST")
-internal fun <T : ISupportFragment> FragmentManager?.findFragment(tag: String?): T? {
-    if (this == null) return null
-    return findFragmentByTag(tag) as? T
+    val list = ArrayList<Fragment>(size - startIndex)
+    for (i in size - 1 downTo startIndex) {
+        val fragment = fragments[i]
+        if (fragment != null && fragment.view != null) {
+            list.add(fragment)
+        }
+    }
+    return list
 }
 
 internal fun FragmentManager?.handleAfterSaveInStateTransactionException(action: String) {

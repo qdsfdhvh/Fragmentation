@@ -30,7 +30,7 @@ public interface ISupportFragment {
 
     SupportFragmentDelegate getSupportDelegate();
 
-    ExtraTransactionKtx extraTransaction();
+    ExtraTransaction extraTransaction();
 
     void enqueueAction(Runnable runnable);
 

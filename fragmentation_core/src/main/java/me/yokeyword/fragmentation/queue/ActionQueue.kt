@@ -3,6 +3,7 @@ package me.yokeyword.fragmentation.queue
 import android.os.Handler
 import android.os.Looper
 import me.yokeyword.fragmentation.SupportHelperKtx
+import me.yokeyword.fragmentation.getBackStackTopFragment
 import java.util.*
 
 class ActionQueue(private val mainHandler: Handler) {
@@ -41,7 +42,7 @@ class ActionQueue(private val mainHandler: Handler) {
 
     private fun executeNextAction(action: Action) {
         if (action.action == Action.Type.POP) {
-            val top = SupportHelperKtx.getBackStackTopFragment(action.fragmentManager, 0)
+            val top = action.fragmentManager.getBackStackTopFragment()
             action.duration = top?.supportDelegate?.exitAnimDuration ?: Action.DEFAULT_POP_TIME
         }
         mainHandler.postDelayed({

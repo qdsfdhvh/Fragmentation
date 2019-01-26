@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import me.yokeyword.fragmentation.ISupportActivity
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import me.yokeyword.fragmentation.start
 import me.yokeyword.sample.R
+import me.yokeyword.sample.base.toast
 import me.yokeyword.sample.flow.adapter.HomeAdapter
 import me.yokeyword.sample.flow.base.BaseMainFragment
 import me.yokeyword.sample.flow.entity.Article
@@ -46,21 +48,21 @@ class HomeFragment : BaseMainFragment(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_anim -> {
-                val popupMenu = PopupMenu(_mActivity, mToolbar!!, GravityCompat.END)
+                val popupMenu = PopupMenu(ctx!!, mToolbar!!, GravityCompat.END)
                 popupMenu.inflate(R.menu.home_pop)
                 popupMenu.setOnMenuItemClickListener { item ->
                     when (item.itemId) {
                         R.id.action_anim_veritical -> {
-                            (_mActivity as ISupportActivity).fragmentAnimator = FragmentAnimator.verticalAnimator()
-                            Toast.makeText(_mActivity, R.string.anim_v, Toast.LENGTH_SHORT).show()
+                            (ctx as ISupportActivity).fragmentAnimator = FragmentAnimator.verticalAnimator()
+                            Toast.makeText(ctx, R.string.anim_v, Toast.LENGTH_SHORT).show()
                         }
                         R.id.action_anim_horizontal -> {
-                            (_mActivity as ISupportActivity).fragmentAnimator = FragmentAnimator.horizontalAnimator()
-                            Toast.makeText(_mActivity, R.string.anim_h, Toast.LENGTH_SHORT).show()
+                            (ctx as ISupportActivity).fragmentAnimator = FragmentAnimator.horizontalAnimator()
+                            Toast.makeText(ctx, R.string.anim_h, Toast.LENGTH_SHORT).show()
                         }
                         R.id.action_anim_none -> {
-                            (_mActivity as ISupportActivity).fragmentAnimator = FragmentAnimator.noAnimator()
-                            Toast.makeText(_mActivity, R.string.anim_none, Toast.LENGTH_SHORT)
+                            (ctx as ISupportActivity).fragmentAnimator = FragmentAnimator.noAnimator()
+                            Toast.makeText(ctx, R.string.anim_none, Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }
@@ -85,12 +87,12 @@ class HomeFragment : BaseMainFragment(), Toolbar.OnMenuItemClickListener {
         mToolbar!!.inflateMenu(R.menu.home)
         mToolbar!!.setOnMenuItemClickListener(this)
 
-        mAdapter = HomeAdapter(_mActivity)
-        val manager = LinearLayoutManager(_mActivity)
+        mAdapter = HomeAdapter(ctx)
+        val manager = LinearLayoutManager(ctx)
         mRecy!!.layoutManager = manager
         mRecy!!.adapter = mAdapter
 
-        mAdapter!!.setOnItemClickListener { position, view ->
+        mAdapter!!.setOnItemClickListener { position, _ ->
             start(
                 DetailFragment.newInstance(
                     mAdapter!!.getItem(position).title
@@ -111,10 +113,10 @@ class HomeFragment : BaseMainFragment(), Toolbar.OnMenuItemClickListener {
     /**
      * 类似于 Activity的 onNewIntent()
      */
-    override fun onNewBundle(args: Bundle) {
+    override fun onNewBundle(args: Bundle?) {
         super.onNewBundle(args)
 
-        Toast.makeText(_mActivity, args.getString("from"), Toast.LENGTH_SHORT).show()
+        toast(args?.getString("from") ?: return)
     }
 
     companion object {

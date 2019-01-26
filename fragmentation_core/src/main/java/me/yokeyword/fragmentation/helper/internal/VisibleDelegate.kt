@@ -142,7 +142,7 @@ class VisibleDelegate(private val support: ISupportFragment,
         } else {
             if (checkAddState()) return
 
-            val fragments = fragment.getChildActiveFragments() ?: return
+            val fragments = fragment.childFragmentManager.getActiveFragments() ?: return
             if (fragments.isNullOrEmpty()) return
             for (child in fragments) {
                 if (child is ISupportFragment && child.isUserVisible()) {

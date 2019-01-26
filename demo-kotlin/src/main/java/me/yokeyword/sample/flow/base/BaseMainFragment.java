@@ -4,13 +4,14 @@ import android.content.Context;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
+import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.sample.R;
 
 
 /**
  * Created by YoKeyword on 16/2/3.
  */
-public class BaseMainFragment extends MySupportFragment {
+public class BaseMainFragment extends SupportFragment {
 
     protected OnFragmentOpenDrawerListener mOpenDraweListener;
 

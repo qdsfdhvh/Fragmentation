@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import me.yokeyword.fragmentation.helper.internal.TransactionRecord
 
-interface ExtraTransactionKtx {
+interface ExtraTransaction {
 
     /**
      * @param tag Optional tag name for the fragment, to later retrieve the
@@ -18,7 +18,7 @@ interface ExtraTransactionKtx {
      *            , pop(String)
      *            or FragmentManager.findFragmentByTag(String).
      */
-    fun setTag(tag: String): ExtraTransactionKtx
+    fun setTag(tag: String): ExtraTransaction
 
     /**
      * Set specific animation resources to run for the fragments that are
@@ -29,12 +29,12 @@ interface ExtraTransactionKtx {
     fun setCustomAnimations(@AnimatorRes @AnimRes targetFragmentEnter: Int,
                             @AnimatorRes @AnimRes currentFragmentPopExit: Int,
                             @AnimatorRes @AnimRes currentFragmentPopEnter: Int = 0,
-                            @AnimatorRes @AnimRes targetFragmentExit: Int = 0): ExtraTransactionKtx
+                            @AnimatorRes @AnimRes targetFragmentExit: Int = 0): ExtraTransaction
 
     /**
      * Don't add this extraTransaction to the back stack.
      */
-    fun dontAddToBackStack(): DontAddToBackStackTransaction
+    fun dontAddToBackStack(): ExtraTransaction
 
     /**
      * Used with custom Transitions to map a View from a removed or hidden
@@ -49,7 +49,7 @@ interface ExtraTransactionKtx {
      * @see Fragment#setSharedElementEnterTransition(Object)
      */
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    fun addSharedElement(sharedElement: View, sharedName: String): ExtraTransactionKtx
+    fun addSharedElement(sharedElement: View, sharedName: String): ExtraTransaction
 
     fun loadRootFragment(containerId: Int, toFragment: ISupportFragment, addToBackStack: Boolean, allowAnim: Boolean)
 
@@ -88,37 +88,24 @@ interface ExtraTransactionKtx {
      */
     fun remove(fragment: ISupportFragment, showPreFragment: Boolean)
 
-    interface DontAddToBackStackTransaction {
-        /**
-         * add() +  hide(preFragment)
-         */
-        fun start(to: ISupportFragment)
-
-        /**
-         * Only add()
-         */
-        fun add(to: ISupportFragment)
-
-        /**
-         * replace()
-         */
-        fun replace(to: ISupportFragment)
-    }
-
 }
 
-class ExtraTransactionKtxImpl(private val activity: FragmentActivity,
-                              private val support: ISupportFragment,
-                              private val fragment: Fragment,
-                              private val delegate: TransactionDelegate,
-                              private val fromActivity: Boolean): ExtraTransactionKtx, ExtraTransactionKtx.DontAddToBackStackTransaction  {
+class ExtraTransactionImpl(private val activity: FragmentActivity,
+                           private val support: ISupportFragment,
+                           private val delegate: TransactionDelegate,
+                           private val fromActivity: Boolean) : ExtraTransaction {
 
-    constructor(activity: FragmentActivity, support: ISupportFragment, delegate: TransactionDelegate, fromActivity: Boolean):
-            this(activity, support, support as Fragment, delegate, fromActivity)
-
+    private val fragment: Fragment
     private val record = TransactionRecord()
 
-    override fun setTag(tag: String): ExtraTransactionKtx {
+    init {
+        if (support !is Fragment) {
+            throw RuntimeException("Must extends Fragment")
+        }
+        fragment = support
+    }
+
+    override fun setTag(tag: String): ExtraTransaction {
         record.tag = tag
         return this
     }
@@ -126,7 +113,7 @@ class ExtraTransactionKtxImpl(private val activity: FragmentActivity,
     override fun setCustomAnimations(targetFragmentEnter: Int,
                                      currentFragmentPopExit: Int,
                                      currentFragmentPopEnter: Int,
-                                     targetFragmentExit: Int): ExtraTransactionKtx {
+                                     targetFragmentExit: Int): ExtraTransaction {
         record.targetFragmentEnter = targetFragmentEnter
         record.currentFragmentPopExit = currentFragmentPopExit
         record.currentFragmentPopEnter = currentFragmentPopEnter
@@ -134,12 +121,12 @@ class ExtraTransactionKtxImpl(private val activity: FragmentActivity,
         return this
     }
 
-    override fun dontAddToBackStack(): ExtraTransactionKtx.DontAddToBackStackTransaction {
+    override fun dontAddToBackStack(): ExtraTransaction {
         record.dontAddToBackStack = true
         return this
     }
 
-    override fun addSharedElement(sharedElement: View, sharedName: String): ExtraTransactionKtx {
+    override fun addSharedElement(sharedElement: View, sharedName: String): ExtraTransaction {
         record.add(sharedElement, sharedName)
         return this
     }
@@ -153,24 +140,12 @@ class ExtraTransactionKtxImpl(private val activity: FragmentActivity,
             containerId, toFragment, addToBackStack, allowAnim)
     }
 
-    override fun start(to: ISupportFragment) {
-        start(to, ISupportFragment.STANDARD)
-    }
-
     override fun start(to: ISupportFragment, launchMode: Int) {
         to.supportDelegate.mTransactionRecord = record
         delegate.dispatchStartTransaction(getFragmentManager(),
             support, to, 0,
             launchMode,
             TransactionDelegate.TYPE_ADD)
-    }
-
-    override fun add(to: ISupportFragment) {
-        to.supportDelegate.mTransactionRecord = record
-        delegate.dispatchStartTransaction(getFragmentManager(),
-            support, to, 0,
-            ISupportFragment.STANDARD,
-            TransactionDelegate.TYPE_ADD_WITHOUT_HIDE)
     }
 
     override fun replace(to: ISupportFragment) {

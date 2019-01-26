@@ -12,7 +12,7 @@ public interface ISupportActivity {
 
     SupportActivityDelegate getSupportDelegate();
 
-    ExtraTransactionKtx extraTransaction();
+    ExtraTransaction extraTransaction();
 
     FragmentAnimator getFragmentAnimator();
 

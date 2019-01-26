@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.flow.adapter.MenuAdapter;
-import me.yokeyword.sample.flow.base.MySupportFragment;
 import me.yokeyword.sample.flow.listener.OnItemClickListener;
 
 /**
  * Created by YoKeyword on 16/2/9.
  */
-public class MenuListFragment extends MySupportFragment {
+public class MenuListFragment extends SupportFragment {
     private static final String ARG_MENUS = "arg_menus";
     private static final String SAVE_STATE_POSITION = "save_state_position";
 
@@ -70,9 +70,9 @@ public class MenuListFragment extends MySupportFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        LinearLayoutManager manager = new LinearLayoutManager(_mActivity);
+        LinearLayoutManager manager = new LinearLayoutManager(getCtx());
         mRecy.setLayoutManager(manager);
-        mAdapter = new MenuAdapter(_mActivity);
+        mAdapter = new MenuAdapter(getCtx());
         mRecy.setAdapter(mAdapter);
         mAdapter.setDatas(mMenus);
 
@@ -101,7 +101,7 @@ public class MenuListFragment extends MySupportFragment {
 
         mAdapter.setItemChecked(position);
 
-        ContentFragment fragment = ContentFragment.newInstance(mMenus.get(position));
+        ContentFragment fragment = ContentFragment.Companion.newInstance(mMenus.get(position));
 
         ((ShopFragment) getParentFragment()).switchContentFragment(fragment);
     }

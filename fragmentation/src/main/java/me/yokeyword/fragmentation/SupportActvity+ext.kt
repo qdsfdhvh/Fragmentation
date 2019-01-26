@@ -30,3 +30,7 @@ internal fun dispatchKeyEvent(activeFragment: ISupportFragment?, event: KeyEvent
     }
     return false
 }
+
+internal fun SupportActivity.getActiveFragment(): ISupportFragment? {
+    return supportFragmentManager.getActiveFragment()
+}

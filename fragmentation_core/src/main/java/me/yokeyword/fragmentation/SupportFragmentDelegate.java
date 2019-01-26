@@ -71,12 +71,12 @@ public class SupportFragmentDelegate {
      * Perform some extra transactions.
      * 额外的事务：自定义Tag，添加SharedElement动画，操作非回退栈Fragment
      */
-    public ExtraTransactionKtx extraTransaction() {
+    public ExtraTransaction extraTransaction() {
         if (mTransactionDelegate == null)
             throw new RuntimeException(mFragment.getClass().getSimpleName() + " not attach!");
 
 //        return new ExtraTransaction.ExtraTransactionImpl<>((FragmentActivity) mSupport, mSupportF, mTransactionDelegate, false);
-        return new ExtraTransactionKtxImpl((FragmentActivity) mSupport, mSupportF, mTransactionDelegate,false);
+        return new ExtraTransactionImpl((FragmentActivity) mSupport, mSupportF, mTransactionDelegate,false);
     }
 
     public void onAttach(Activity activity) {
@@ -128,12 +128,12 @@ public class SupportFragmentDelegate {
 
             @Override
             public void onAnimationStart(Animation animation) {
-                mSupport.getSupportDelegate().mFragmentClickable = false;  // 开启防抖动
+                mSupport.getSupportDelegate().setFragmentClickable(false);  // 开启防抖动
 
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mSupport.getSupportDelegate().mFragmentClickable = true;
+                        mSupport.getSupportDelegate().setFragmentClickable(true);
                     }
                 }, enter.getDuration());
             }
@@ -150,7 +150,7 @@ public class SupportFragmentDelegate {
     }
 
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        if ((mSupport.getSupportDelegate().mPopMultipleNoAnim || mLockAnim)) {
+        if ((mSupport.getSupportDelegate().getPopMultipleNoAnim() || mLockAnim)) {
             if (transit == FragmentTransaction.TRANSIT_FRAGMENT_CLOSE && enter) {
                 return mAnimHelper.getNoneAnimFixed();
             }
@@ -226,7 +226,7 @@ public class SupportFragmentDelegate {
     }
 
     public void onDestroyView() {
-        mSupport.getSupportDelegate().mFragmentClickable = true;
+        mSupport.getSupportDelegate().setFragmentClickable(true);
         getVisibleDelegate().onDestroyView();
         getHandler().removeCallbacks(mNotifyEnterAnimEndRunnable);
     }
@@ -591,7 +591,7 @@ public class SupportFragmentDelegate {
     private void fixAnimationListener(Animation enterAnim) {
         // AnimationListener is not reliable.
         getHandler().postDelayed(mNotifyEnterAnimEndRunnable, enterAnim.getDuration());
-        mSupport.getSupportDelegate().mFragmentClickable = true;
+        mSupport.getSupportDelegate().setFragmentClickable(true);
 
         if (mEnterAnimListener != null) {
             getHandler().post(new Runnable() {
@@ -660,7 +660,7 @@ public class SupportFragmentDelegate {
 
     private void notifyEnterAnimEnd() {
         getHandler().post(mNotifyEnterAnimEndRunnable);
-        mSupport.getSupportDelegate().mFragmentClickable = true;
+        mSupport.getSupportDelegate().setFragmentClickable(true);
     }
 
     private Handler getHandler() {

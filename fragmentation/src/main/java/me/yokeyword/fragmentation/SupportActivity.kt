@@ -29,12 +29,12 @@ abstract class SupportActivity: AppCompatActivity(), ISupportActivity {
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         return delegate.dispatchTouchEvent(ev)
-                || dispatchTouchEventEvent(SupportHelperKtx.getActiveFragment(supportFragmentManager), ev)
+                || dispatchTouchEventEvent(getActiveFragment(), ev)
                 || dispatchTouchEventSupport(ev)
     }
 
     override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-        return dispatchKeyEvent(SupportHelperKtx.getActiveFragment(supportFragmentManager), event)
+        return dispatchKeyEvent(getActiveFragment(), event)
                 || dispatchKeyEventSupport(event)
     }
 
@@ -47,18 +47,18 @@ abstract class SupportActivity: AppCompatActivity(), ISupportActivity {
     }
 
     override fun getFragmentAnimator(): FragmentAnimator {
-        return delegate.fragmentAnimator
+        return delegate.getFragmentAnimator()
     }
 
-    override fun setFragmentAnimator(fragmentAnimator: FragmentAnimator?) {
-        delegate.fragmentAnimator = fragmentAnimator
+    override fun setFragmentAnimator(fragmentAnimator: FragmentAnimator) {
+        delegate.setFragmentAnimator(fragmentAnimator)
     }
 
     override fun onCreateFragmentAnimator(): FragmentAnimator {
         return delegate.onCreateFragmentAnimator()
     }
 
-    override fun post(runnable: Runnable?) {
+    override fun post(runnable: Runnable) {
         delegate.post(runnable)
     }
 
@@ -66,7 +66,7 @@ abstract class SupportActivity: AppCompatActivity(), ISupportActivity {
         return delegate
     }
 
-    override fun extraTransaction(): ExtraTransactionKtx {
+    override fun extraTransaction(): ExtraTransaction {
         return delegate.extraTransaction()
     }
 

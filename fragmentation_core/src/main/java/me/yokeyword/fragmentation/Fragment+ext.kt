@@ -4,21 +4,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
-internal fun Fragment.getActiveFragments(): List<Fragment?>? {
-    return fragmentManager.getActiveFragments()
-}
-
-internal fun Fragment.getChildActiveFragments(): List<Fragment?>? {
-    return childFragmentManager.getActiveFragments()
-}
-
-internal fun Fragment.getISupportFragments(): List<ISupportFragment>? {
-    return fragmentManager.getISupportFragments()
-}
-
-internal fun Fragment.getChildISupportFragments(): List<ISupportFragment>? {
-    return childFragmentManager.getISupportFragments()
-}
+//internal fun Fragment.getActiveFragments(): List<Fragment?>? {
+//    return fragmentManager.getActiveFragments()
+//}
+//
+//internal fun Fragment.getChildActiveFragments(): List<Fragment?>? {
+//    return childFragmentManager.getActiveFragments()
+//}
+//
+//internal fun Fragment.getISupportFragments(): List<ISupportFragment>? {
+//    return fragmentManager.getISupportFragments()
+//}
+//
+//internal fun Fragment.getChildISupportFragments(): List<ISupportFragment>? {
+//    return childFragmentManager.getISupportFragments()
+//}
 
 internal fun Fragment.getChildActiveFragment(): ISupportFragment? {
     if (this !is ISupportFragment) return null

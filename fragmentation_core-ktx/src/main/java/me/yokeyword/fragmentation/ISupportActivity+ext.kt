@@ -76,7 +76,12 @@ fun ISupportActivity.pop() {
  */
 fun <T : ISupportFragment> ISupportActivity.findFragment(clazz: Class<T>): T? {
     if (this !is FragmentActivity) return null
-    return SupportHelperKtx.findFragment(supportFragmentManager, clazz)
+    return supportFragmentManager.findFragment(clazz)
+}
+
+fun <T : ISupportFragment> ISupportActivity.findFragment(tag: String?): T? {
+    if (this !is FragmentActivity) return null
+    return supportFragmentManager.findFragment(tag)
 }
 
 /**
@@ -86,4 +91,12 @@ fun <T : ISupportFragment> ISupportActivity.findFragment(clazz: Class<T>): T? {
  */
 fun <T : ISupportFragment> ISupportActivity.popToChild(clazz: Class<T>, self: Boolean) {
     supportDelegate.popTo(clazz, self)
+}
+
+/**
+ * 获取顶栈
+ */
+fun ISupportActivity.getTopFragment(containerId: Int = 0): ISupportFragment? {
+    if (this !is FragmentActivity) return null
+    return supportFragmentManager.getTopFragment(containerId)
 }
