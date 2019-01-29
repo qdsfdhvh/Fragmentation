@@ -26,7 +26,7 @@ fun FragmentManager?.getTopFragment(containerId: Int = 0): ISupportFragment? {
 
     for (fa in fragments.reversed()) {
         if (containerId == 0) return fa
-        if (fa.supportDelegate.mContainerId == containerId) return fa
+        if (fa.supportDelegate.containerId == containerId) return fa
     }
     return null
 }

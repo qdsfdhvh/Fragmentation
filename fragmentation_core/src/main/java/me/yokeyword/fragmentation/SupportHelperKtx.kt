@@ -10,19 +10,12 @@ import androidx.fragment.app.FragmentationMagician
 
 object SupportHelperKtx {
 
-    private const val SHOW_SPACE = 200L
-
     fun showSoftInput(view: View?) {
-        val imm = view?.context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
-        view.requestFocus()
-        view.postDelayed({
-            imm.showSoftInput(view, InputMethodManager.SHOW_FORCED)
-        }, SHOW_SPACE)
+        view.showSoftInput()
     }
 
     fun hideSoftInput(view: View?) {
-        val imm = view?.context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager ?: return
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        view.hideSoftInput()
     }
 
     /**

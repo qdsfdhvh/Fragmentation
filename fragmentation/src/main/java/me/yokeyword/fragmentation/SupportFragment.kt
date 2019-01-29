@@ -80,10 +80,12 @@ abstract class SupportFragment: Fragment(), ISupportFragment {
     }
 
     override fun enqueueAction(runnable: Runnable?) {
+        if (runnable == null) return
         delegate.post(runnable)
     }
 
     override fun post(runnable: Runnable?) {
+        if (runnable == null) return
         delegate.post(runnable)
     }
 
@@ -104,7 +106,7 @@ abstract class SupportFragment: Fragment(), ISupportFragment {
     }
 
     override fun isSupportVisible(): Boolean {
-        return delegate.isSupportVisible
+        return delegate.isSupportVisible()
     }
 
     override fun onCreateFragmentAnimator(): FragmentAnimator {
@@ -112,11 +114,11 @@ abstract class SupportFragment: Fragment(), ISupportFragment {
     }
 
     override fun getFragmentAnimator(): FragmentAnimator {
-        return delegate.fragmentAnimator
+        return delegate.getFragmentAnimator()
     }
 
-    override fun setFragmentAnimator(fragmentAnimator: FragmentAnimator?) {
-        delegate.fragmentAnimator
+    override fun setFragmentAnimator(fragmentAnimator: FragmentAnimator) {
+        delegate.setFragmentAnimator(fragmentAnimator)
     }
 
     override fun onBackPressedSupport(): Boolean {
@@ -131,21 +133,13 @@ abstract class SupportFragment: Fragment(), ISupportFragment {
         delegate.onFragmentResult(requestCode, resultCode, data)
     }
 
-    override fun onNewBundle(args: Bundle?) {
-        delegate.onNewBundle(args)
-    }
+    override fun onNewBundle(args: Bundle?) = delegate.onNewBundle(args)
 
-    override fun putNewBundle(newBundle: Bundle?) {
-        delegate.putNewBundle(newBundle)
-    }
+    override fun putNewBundle(newBundle: Bundle?) = delegate.putNewBundle(newBundle)
 
-    override fun getSupportDelegate(): SupportFragmentDelegate {
-        return delegate
-    }
+    override fun getSupportDelegate(): SupportFragmentDelegate = delegate
 
-    override fun extraTransaction(): ExtraTransaction {
-        return delegate.extraTransaction()
-    }
+    override fun extraTransaction(): ExtraTransaction = delegate.extraTransaction()
 
     open fun dispatchTouchEventSupport(ev: MotionEvent?): Boolean {
         return false

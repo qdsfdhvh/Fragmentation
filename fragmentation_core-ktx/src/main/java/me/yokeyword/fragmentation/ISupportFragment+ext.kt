@@ -12,6 +12,7 @@ fun ISupportFragment.loadRootFragment(containerId: Int,
                                       fragment: ISupportFragment?,
                                       addToBackStack: Boolean = true,
                                       allowAnimation: Boolean = false) {
+    if (fragment == null) return
     supportDelegate.loadRootFragment(containerId, fragment, addToBackStack, allowAnimation)
 }
 
@@ -23,7 +24,7 @@ fun ISupportFragment.loadRootFragment(containerId: Int,
 fun <T : ISupportFragment> ISupportFragment.loadRootFragments(containerId: Int,
                                                              showPosition: Int,
                                                              fragments: Array<T?>) {
-    supportDelegate.loadMultipleRootFragment(containerId, showPosition, *fragments)
+    supportDelegate.loadMultipleRootFragment(containerId, showPosition, fragments)
 }
 
 /**
@@ -31,18 +32,20 @@ fun <T : ISupportFragment> ISupportFragment.loadRootFragments(containerId: Int,
  * @param to 待加载的fragment
  * @param mode 启动类型
  */
-fun ISupportFragment.start(to: ISupportFragment, @ISupportFragment.LaunchMode mode: Int = ISupportFragment.STANDARD) {
-    supportDelegate.start(to, mode)
+fun ISupportFragment.start(to: ISupportFragment,
+                           requestCode: Int = 0,
+                           mode: Transaction.LaunchMode = Transaction.LaunchMode.STANDARD) {
+    supportDelegate.start(to, requestCode, mode)
 }
 
-/**
- * 跳转到指定fragment，按需要指定requestCode
- * @param to 待加载的fragment
- * @param requestCode 返回code
- */
-fun ISupportFragment.startForResult(to: ISupportFragment, requestCode: Int) {
-    supportDelegate.startForResult(to, requestCode)
-}
+///**
+// * 跳转到指定fragment，按需要指定requestCode
+// * @param to 待加载的fragment
+// * @param requestCode 返回code
+// */
+//fun ISupportFragment.startForResult(to: ISupportFragment, requestCode: Int) {
+//    supportDelegate.start(to, requestCode)
+//}
 
 /**
  * 跳转到指定fragment，不隐藏当前fragment
@@ -82,6 +85,7 @@ fun ISupportFragment.startWithPop(to: ISupportFragment) {
  */
 fun ISupportFragment.showHideFragment(show: ISupportFragment?,
                                       hide: ISupportFragment? = null) {
+    if (null == show) return
     supportDelegate.showHideFragment(show, hide)
 }
 
@@ -103,7 +107,7 @@ fun <T : ISupportFragment> ISupportFragment.popTo(clazz: Class<T>,
                                                   self: Boolean = true,
                                                   runnable: Runnable? = null,
                                                   popAnim: Int = TransactionDelegate.DEFAULT_POPTO_ANIM) {
-    supportDelegate.popTo(clazz, self, runnable, popAnim)
+    supportDelegate.popTo(clazz.name, self, runnable, popAnim)
 }
 
 /**
@@ -145,7 +149,7 @@ fun ISupportFragment.hideSoftInput() {
  * @param self 是否包含自身
  */
 fun <T : ISupportFragment> ISupportFragment.popToChild(clazz: Class<T>, self: Boolean) {
-    supportDelegate.popTo(clazz, self)
+    supportDelegate.popTo(clazz.name, self)
 }
 
 /**
@@ -163,7 +167,7 @@ fun ISupportFragment.replaceFragment(to: ISupportFragment, addToBackStack: Boole
  * @param self 目标fragment自身是否需要退栈
  */
 fun <T : ISupportFragment> ISupportFragment.startWithPopTo(to: ISupportFragment, clazz: Class<T>, self: Boolean = false) {
-    supportDelegate.startWithPopTo(to, clazz, self)
+    supportDelegate.startWithPopTo(to, clazz.name, self)
 }
 
 /**
@@ -181,7 +185,7 @@ fun ISupportFragment.startChild(to: ISupportFragment, @ISupportFragment.LaunchMo
  * @param requestCode 返回code
  */
 fun ISupportFragment.startChildForResult(to: ISupportFragment, requestCode: Int) {
-    supportDelegate.startChildForResult(to, requestCode)
+    supportDelegate.startChild(to, requestCode)
 }
 
 /**
@@ -206,7 +210,7 @@ fun ISupportFragment.popQuiet() {
 }
 
 
-// User for me
+// Simple User
 
 /**
  * 父级跳转到指定fragment
@@ -216,6 +220,7 @@ fun ISupportFragment.parentStart(to: ISupportFragment) {
     val parent = parentFragment as? ISupportFragment ?: return
     parent.start(to)
 }
+
 
 // Wait to del
 
@@ -227,5 +232,5 @@ fun ISupportFragment.parentStart(to: ISupportFragment) {
 fun <T : ISupportFragment> ISupportFragment.loadMultipleRootFragment(containerId: Int,
                                                                      showPosition: Int,
                                                                      vararg fragments: T?) {
-    supportDelegate.loadMultipleRootFragment(containerId, showPosition, *fragments)
+    supportDelegate.loadMultipleRootFragment(containerId, showPosition, fragments)
 }

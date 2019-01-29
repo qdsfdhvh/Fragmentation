@@ -23,10 +23,10 @@ object EventBusActivityScope {
         AtomicBoolean(false)
     }
 
-    fun init(context: Context) {
+    fun init(context: Context?) {
         if (!sInitialized.compareAndSet(false, true)) return
 
-        val bak = context.applicationContext
+        val bak = context?.applicationContext
         if (bak is Application) {
             bak.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
 

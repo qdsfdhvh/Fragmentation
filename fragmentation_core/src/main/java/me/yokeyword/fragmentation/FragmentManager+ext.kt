@@ -26,7 +26,7 @@ internal fun FragmentManager?.getBackStackTopFragment(containerId: Int = 0): ISu
         val fa = findFragmentByTag(entry.name)
         if (fa is ISupportFragment) {
             if (containerId == 0) return fa
-            if (fa.supportDelegate.mContainerId == containerId) return fa
+            if (fa.supportDelegate.containerId == containerId) return fa
         }
     }
     return null
@@ -49,6 +49,8 @@ internal fun <T : ISupportFragment> FragmentManager?.findBackStackFragment(tag: 
     return null
 }
 
+
+// TODO
 internal fun FragmentManager?.getWillPopFragments(tag: String, includeTarget: Boolean): List<Fragment> {
     if (this == null) return emptyList()
 

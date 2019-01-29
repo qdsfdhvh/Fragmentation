@@ -23,9 +23,10 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
     var popMultipleNoAnim = false
     var fragmentClickable = true
 
-    private lateinit var fragmentAnimator: FragmentAnimator
-    private val debugStackDelegate by lazy { DebugStackDelegate(activity) }
-    val delegate by lazy { TransactionDelegate(support) }
+    private lateinit var animator: FragmentAnimator
+    private val delegate by lazy { TransactionDelegate(support) }
+    private val debugStack by lazy { DebugStackDelegate(activity) }
+    private val transaction by lazy { TransactionImpl(null, activity.supportFragmentManager, delegate) }
 
     /**
      * 当Fragment根布局 没有 设定background属性时,
@@ -34,13 +35,28 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
      */
     @DrawableRes var defaultFragmentBackground = 0
 
+    /**
+     * 针对每个Fragment都重新生成一个 额外事物
+     */
+    private val extraArray by lazy { HashMap<ISupportFragment, ExtraTransaction>() }
+
+    fun extraTransaction(): ExtraTransaction {
+        val fragment = activity.supportFragmentManager.getTopFragment()!!
+        var extra = extraArray[fragment]
+        if (extra == null) {
+            extra = ExtraTransactionImpl(activity, fragment, delegate, true)
+            extraArray[fragment] = extra
+        }
+        return extra
+    }
+
     fun onCreate(savedInstanceState: Bundle?) {
-        fragmentAnimator = support.onCreateFragmentAnimator()
-        debugStackDelegate.onCreate(Fragmentation.getDefault().getMode())
+        animator = support.onCreateFragmentAnimator()
+        debugStack.onCreate(Fragmentation.getDefault().getMode())
     }
 
     fun onPostCreate(savedInstanceState: Bundle?) {
-        debugStackDelegate.onPostCreate(Fragmentation.getDefault().getMode())
+        debugStack.onPostCreate(Fragmentation.getDefault().getMode())
     }
 
     fun onBackPressed() {
@@ -48,7 +64,7 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
             override fun run() {
                 if (!fragmentClickable) fragmentClickable = true
 
-                val active = getSupportFragmentManager().getActiveFragment()
+                val active = activity.supportFragmentManager.getActiveFragment()
                 if (delegate.dispatchBackPressedEvent(active)) return
                 support.onBackPressedSupport()
             }
@@ -56,7 +72,7 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
     }
 
     fun onBackPressedSupport() {
-        if (getSupportFragmentManager().backStackEntryCount > 1) {
+        if (activity.supportFragmentManager.backStackEntryCount > 1) {
             pop()
         } else {
             ActivityCompat.finishAfterTransition(activity)
@@ -64,7 +80,8 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
     }
 
     fun onDestroy() {
-        debugStackDelegate.onDestroy()
+        debugStack.onDestroy()
+        extraArray.clear()
     }
 
     fun dispatchTouchEvent(ev: MotionEvent?) = !fragmentClickable
@@ -75,25 +92,30 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
      *
      * @return FragmentAnimator
      */
-    fun getFragmentAnimator() = fragmentAnimator.copy()
+    fun getFragmentAnimator() = animator.copy()
 
     /**
      * Set all fragments animation.
      * 设置Fragment内的全局动画
      */
     fun setFragmentAnimator(animator: FragmentAnimator) {
-        this.fragmentAnimator = animator
+        this.animator = animator
 
-        val fragments = getSupportFragmentManager().getISupportFragments()
+        val fragments = activity.supportFragmentManager.getISupportFragments()
         if (fragments.isNullOrEmpty()) return
 
         for (fa in fragments) {
             val delegate = fa.supportDelegate
-            if (delegate.mAnimByActivity) {
-                delegate.fragmentAnimator = animator.copy()
-                if (delegate.mAnimHelper != null) {
-                    delegate.mAnimHelper.notifyChanged(delegate.fragmentAnimator)
-                }
+//            if (delegate.mAnimByActivity) {
+//                delegate.animator = animator.copy()
+//                if (delegate.mAnimHelper != null) {
+//                    delegate.mAnimHelper.notifyChanged(delegate.animator)
+//                }
+//            }
+            if (delegate.animByActivity) {
+//                delegate.setFragmentAnimator(animator.copy())
+//                delegate.animHelper.notifyChanged(delegate.getFragmentAnimator())
+                delegate.setFragmentAnimator(animator.copy(), true)
             }
         }
     }
@@ -112,12 +134,12 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
     /**
      * 显示栈视图dialog,调试时使用
      */
-    fun showFragmentStackHierarchyView() = debugStackDelegate.showFragmentStackHierarchyView()
+    fun showFragmentStackHierarchyView() = debugStack.showFragmentStackHierarchyView()
 
     /**
      * 显示栈视图日志,调试时使用
      */
-    fun logFragmentStackHierarchy(tag: String) = debugStackDelegate.logFragmentRecords(tag)
+    fun logFragmentStackHierarchy(tag: String) = debugStack.logFragmentRecords(tag)
 
     /**
      * Causes the Runnable r to be added to the action queue.
@@ -130,104 +152,60 @@ class SupportActivityDelegate(private val support: ISupportActivity) {
         delegate.post(runnable)
     }
 
-    fun loadRootFragment(containerId: Int,
-                         to: ISupportFragment?,
-                         addToBackStack: Boolean = true,
-                         allowAnimation: Boolean = false) {
-        delegate.loadRootTransaction(getSupportFragmentManager(),
-            containerId, to,
-            addToBackStack, allowAnimation)
+    fun loadRootFragment(containerId: Int, to: ISupportFragment,
+                         addToBackStack: Boolean = true, allowAnimation: Boolean = false) {
+        transaction.loadRootFragment(containerId, to, addToBackStack, allowAnimation)
     }
 
     fun loadMultipleRootFragment(containerId: Int,
                                  showPosition: Int,
                                  vararg fragments: ISupportFragment?) {
-        delegate.loadMultipleRootTransaction(getSupportFragmentManager(),
-            containerId, showPosition, *fragments)
-    }
-
-    fun showHideFragment(show: ISupportFragment?, hide: ISupportFragment? = null) {
-        delegate.showHideFragment(getSupportFragmentManager(), show, hide)
+        transaction.loadMultipleRootFragment(containerId, showPosition, fragments)
     }
 
     fun start(to: ISupportFragment,
-              @ISupportFragment.LaunchMode launchMode: Int = ISupportFragment.STANDARD) {
-        delegate.dispatchStartTransaction(getSupportFragmentManager(),
-            getTopFragment(), to, 0,
-            launchMode, TransactionDelegate.TYPE_ADD)
+              requestCode: Int = 0,
+              mode: Transaction.LaunchMode = Transaction.LaunchMode.STANDARD) {
+        transaction.start(to, requestCode, mode)
     }
 
-    fun startForResult(to: ISupportFragment,
-                       requestCode: Int,
-                       @ISupportFragment.LaunchMode launchMode: Int = ISupportFragment.STANDARD) {
-        delegate.dispatchStartTransaction(getSupportFragmentManager(),
-            getTopFragment(), to, requestCode,
-            launchMode, TransactionDelegate.TYPE_ADD_RESULT)
+    fun startDontHideSelf(to: ISupportFragment,
+                          requestCode: Int = 0,
+                          mode: Transaction.LaunchMode = Transaction.LaunchMode.STANDARD) {
+        transaction.startDontHideSelf(to, requestCode, mode)
     }
 
     fun startWithPop(to: ISupportFragment) {
-        delegate.startWithPop(getSupportFragmentManager(),
-            getTopFragment(), to)
+        transaction.startWithPop(to)
     }
 
-    fun <T : ISupportFragment> startWithPopTo(to: ISupportFragment,
-                                             clazz: Class<T>,
-                                             includeTargetFragment: Boolean) {
-        delegate.startWithPopTo(getSupportFragmentManager(),
-            getTopFragment(), to, clazz.name, includeTargetFragment)
-    }
-
-    fun replaceFragment(to: ISupportFragment, addToBackStack: Boolean) {
-        delegate.dispatchStartTransaction(getSupportFragmentManager(),
-            getTopFragment(), to, 0,
-            ISupportFragment.STANDARD,
-            if (addToBackStack) TransactionDelegate.TYPE_REPLACE else TransactionDelegate.TYPE_REPLACE_DONT_BACK)
+    fun startWithPopTo(to: ISupportFragment, tag: String, self: Boolean) {
+        transaction.startWithPopTo(to, tag, self)
     }
 
     fun pop() {
-        delegate.pop(getSupportFragmentManager())
+        transaction.pop()
     }
 
-    fun <T : ISupportFragment> popTo(clazz: Class<T>,
-                                     includeTargetFragment: Boolean,
-                                     runnable: Runnable? = null,
-                                     popAnim: Int = TransactionDelegate.DEFAULT_POPTO_ANIM) {
-        delegate.popTo(clazz.name, includeTargetFragment, runnable, getSupportFragmentManager(), popAnim)
+    fun popTo(tag: String,
+              self: Boolean,
+              runnable: Runnable? = null,
+              popAnim: Int = TransactionDelegate.DEFAULT_POPTO_ANIM) {
+        transaction.popTo(tag, self, runnable, popAnim)
     }
 
-    /**
-     * 针对每个Fragment都重新生成一个 额外事物
-     */
-    private val extraArray by lazy { HashMap<ISupportFragment, ExtraTransaction>() }
+    fun removeFragment(fragment: ISupportFragment, showPre: Boolean = true) {
+        transaction.removeFragment(fragment, showPre)
+    }
 
-    fun extraTransaction(): ExtraTransaction {
-        val fragment = getTopFragment()!!
-        var extra = extraArray[fragment]
-        if (extra == null) {
-            extra = ExtraTransactionImpl(activity, getTopFragment()!!, delegate, true)
-            extraArray[fragment] = extra
-        }
-        return extra
+    fun replaceFragment(to: ISupportFragment, addToBackStack: Boolean = true) {
+        transaction.replaceFragment(to, addToBackStack)
+    }
+
+    fun showHideFragment(show: ISupportFragment, hide: ISupportFragment? = null) {
+        transaction.showHideFragment(show, hide)
     }
 
     fun getTransactionDelegate() = delegate
-
-    private fun getSupportFragmentManager() = activity.supportFragmentManager
-
-    private fun getTopFragment() = getSupportFragmentManager().getTopFragment()
-
-
-    // Wait to del
-
-    fun <T : ISupportFragment> popTo(clazz: Class<T>,
-                                     includeTargetFragment: Boolean) {
-        popTo(clazz, includeTargetFragment, null)
-    }
-
-    fun <T : ISupportFragment> popTo(clazz: Class<T>,
-                                     includeTargetFragment: Boolean,
-                                     runnable: Runnable?) {
-        popTo(clazz, includeTargetFragment, runnable, TransactionDelegate.DEFAULT_POPTO_ANIM)
-    }
 
 }

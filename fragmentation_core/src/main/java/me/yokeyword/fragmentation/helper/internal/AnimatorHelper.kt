@@ -1,5 +1,6 @@
 package me.yokeyword.fragmentation.helper.internal
 
+import android.animation.Animator
 import android.content.Context
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -8,6 +9,8 @@ import me.yokeyword.fragmentation.R
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
 class AnimatorHelper(private val context: Context, animator: FragmentAnimator) {
+
+    constructor(context: Context): this(context, FragmentAnimator.noAnimator())
 
     val noneAnim by lazy { R.anim.no_anim.loadAnim() }
     val noneAnimFixed: Animation by lazy { DefaultAnimation() }
@@ -38,6 +41,11 @@ class AnimatorHelper(private val context: Context, animator: FragmentAnimator) {
             return animation
         }
         return null
+    }
+
+    fun loadAnimation(num: Int): Animation? {
+        if (num == Int.MIN_VALUE) return null
+        return num.loadAnim()
     }
 
     private fun Int.loadAnim(): Animation {

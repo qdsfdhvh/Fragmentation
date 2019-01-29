@@ -14,7 +14,7 @@ import android.net.Uri
 class RuntimeTrojanProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
-        EventBusActivityScope.init(context!!)
+        EventBusActivityScope.init(context)
         return true
     }
 

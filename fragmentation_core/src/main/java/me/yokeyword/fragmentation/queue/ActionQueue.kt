@@ -43,7 +43,7 @@ class ActionQueue(private val mainHandler: Handler) {
     private fun executeNextAction(action: Action) {
         if (action.action == Action.Type.POP) {
             val top = action.fragmentManager.getBackStackTopFragment()
-            action.duration = top?.supportDelegate?.exitAnimDuration ?: Action.DEFAULT_POP_TIME
+            action.duration = top?.supportDelegate?.getExitAnimDuration() ?: Action.DEFAULT_POP_TIME
         }
         mainHandler.postDelayed({
             queue.poll()

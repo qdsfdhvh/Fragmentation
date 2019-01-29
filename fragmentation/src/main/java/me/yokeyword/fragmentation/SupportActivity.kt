@@ -46,29 +46,17 @@ abstract class SupportActivity: AppCompatActivity(), ISupportActivity {
         delegate.onBackPressedSupport()
     }
 
-    override fun getFragmentAnimator(): FragmentAnimator {
-        return delegate.getFragmentAnimator()
-    }
+    override fun getFragmentAnimator(): FragmentAnimator =  delegate.getFragmentAnimator()
 
-    override fun setFragmentAnimator(fragmentAnimator: FragmentAnimator) {
-        delegate.setFragmentAnimator(fragmentAnimator)
-    }
+    override fun setFragmentAnimator(fragmentAnimator: FragmentAnimator) = delegate.setFragmentAnimator(fragmentAnimator)
 
-    override fun onCreateFragmentAnimator(): FragmentAnimator {
-        return delegate.onCreateFragmentAnimator()
-    }
+    override fun onCreateFragmentAnimator() = delegate.onCreateFragmentAnimator()
 
-    override fun post(runnable: Runnable) {
-        delegate.post(runnable)
-    }
+    override fun post(runnable: Runnable) = delegate.post(runnable)
 
-    override fun getSupportDelegate(): SupportActivityDelegate {
-        return delegate
-    }
+    override fun getSupportDelegate(): SupportActivityDelegate = delegate
 
-    override fun extraTransaction(): ExtraTransaction {
-        return delegate.extraTransaction()
-    }
+    override fun extraTransaction(): ExtraTransaction = delegate.extraTransaction()
 
     protected open fun dispatchTouchEventSupport(ev: MotionEvent?): Boolean {
         return super.dispatchTouchEvent(ev)

@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.widget.Toolbar
 import me.yokeyword.fragmentation.ISupportFragment
-import me.yokeyword.fragmentation.startForResult
+import me.yokeyword.fragmentation.start
 import me.yokeyword.sample.R
 import me.yokeyword.sample.wechat.base.BaseBackFragment
 
@@ -64,7 +64,7 @@ class DetailFragment : BaseBackFragment() {
     private fun initDelayView() {
         mTvContent!!.setText(R.string.large_text)
 
-        mFab!!.setOnClickListener { startForResult(ModifyDetailFragment.newInstance(mTitle!!), REQ_MODIFY_FRAGMENT) }
+        mFab!!.setOnClickListener { start(ModifyDetailFragment.newInstance(mTitle!!), REQ_MODIFY_FRAGMENT) }
     }
 
     override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {

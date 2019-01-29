@@ -115,7 +115,7 @@ class MainActivity : SupportActivity(),
                     val bundle = Bundle()
                     bundle.putString("from", "From:${top.javaClass.simpleName}")
                     home.putNewBundle(bundle)
-                    top.start(home, ISupportFragment.SINGLETASK)
+                    top.start(home, mode = Transaction.LaunchMode.SINGLE_TASK)
                 }
                 R.id.nav_discover -> {
                     val discover = findFragment(DiscoverFragment::class.java)
@@ -123,7 +123,7 @@ class MainActivity : SupportActivity(),
                     if (discover == null) {
                         top.startWithPopTo(DiscoverFragment.newInstance(), HomeFragment::class.java, false)
                     } else {
-                        top.start(discover, ISupportFragment.SINGLETASK)
+                        top.start(discover, mode = Transaction.LaunchMode.SINGLE_TASK)
                     }
                 }
                 R.id.nav_shop -> {
@@ -132,7 +132,7 @@ class MainActivity : SupportActivity(),
                     if (shop == null) {
                         top.startWithPopTo(ShopFragment.newInstance(), HomeFragment::class.java, false)
                     } else {
-                        top.start(shop, ISupportFragment.SINGLETASK)
+                        top.start(shop, mode = Transaction.LaunchMode.SINGLE_TASK)
                     }
                 }
                 R.id.nav_login -> {

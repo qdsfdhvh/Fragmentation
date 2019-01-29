@@ -135,13 +135,14 @@ class ExtraTransactionImpl(private val activity: FragmentActivity,
                                   toFragment: ISupportFragment,
                                   addToBackStack: Boolean,
                                   allowAnim: Boolean) {
-        toFragment.supportDelegate.mTransactionRecord = record
+        toFragment.supportDelegate.transactionRecord = record
+
         delegate.loadRootTransaction(getFragmentManager(),
             containerId, toFragment, addToBackStack, allowAnim)
     }
 
     override fun start(to: ISupportFragment, launchMode: Int) {
-        to.supportDelegate.mTransactionRecord = record
+        to.supportDelegate.transactionRecord = record
         delegate.dispatchStartTransaction(getFragmentManager(),
             support, to, 0,
             launchMode,
@@ -149,7 +150,7 @@ class ExtraTransactionImpl(private val activity: FragmentActivity,
     }
 
     override fun replace(to: ISupportFragment) {
-        to.supportDelegate.mTransactionRecord = record
+        to.supportDelegate.transactionRecord = record
         delegate.dispatchStartTransaction(getFragmentManager(),
             support, to, 0,
             ISupportFragment.STANDARD,
@@ -157,7 +158,7 @@ class ExtraTransactionImpl(private val activity: FragmentActivity,
     }
 
     override fun startDontHideSelf(to: ISupportFragment, launchMode: Int) {
-        to.supportDelegate.mTransactionRecord = record
+        to.supportDelegate.transactionRecord = record
         delegate.dispatchStartTransaction(getFragmentManager(),
             support, to, 0,
             launchMode,
@@ -165,7 +166,7 @@ class ExtraTransactionImpl(private val activity: FragmentActivity,
     }
 
     override fun startForResult(to: ISupportFragment, requestCode: Int) {
-        to.supportDelegate.mTransactionRecord = record
+        to.supportDelegate.transactionRecord = record
         delegate.dispatchStartTransaction(getFragmentManager(),
             support, to, requestCode,
             ISupportFragment.STANDARD,
@@ -173,7 +174,7 @@ class ExtraTransactionImpl(private val activity: FragmentActivity,
     }
 
     override fun startForResultDontHideSelf(to: ISupportFragment, requestCode: Int) {
-        to.supportDelegate.mTransactionRecord = record
+        to.supportDelegate.transactionRecord = record
         delegate.dispatchStartTransaction(getFragmentManager(),
             support, to, requestCode,
             ISupportFragment.STANDARD,
@@ -181,14 +182,14 @@ class ExtraTransactionImpl(private val activity: FragmentActivity,
     }
 
     override fun startWithPop(to: ISupportFragment) {
-        to.supportDelegate.mTransactionRecord = record
+        to.supportDelegate.transactionRecord = record
         delegate.startWithPop(getFragmentManager(),support, to)
     }
 
     override fun startWithPopTo(to: ISupportFragment,
                                 targetFragmentTag: String,
                                 includeTargetFragment: Boolean) {
-        to.supportDelegate.mTransactionRecord = record
+        to.supportDelegate.transactionRecord = record
         delegate.startWithPopTo(getFragmentManager(),
             support, to, targetFragmentTag, includeTargetFragment)
     }

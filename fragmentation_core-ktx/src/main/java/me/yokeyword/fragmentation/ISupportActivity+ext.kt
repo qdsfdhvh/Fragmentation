@@ -13,6 +13,7 @@ fun ISupportActivity.loadRootFragment(containerId: Int,
                                       fragment: ISupportFragment?,
                                       addToBackStack: Boolean = true,
                                       allowAnimation: Boolean = false) {
+    if (fragment == null) return
     supportDelegate.loadRootFragment(containerId, fragment, addToBackStack, allowAnimation)
 }
 
@@ -30,21 +31,23 @@ fun <T: ISupportFragment> ISupportActivity.loadRootFragments(containerId: Int,
 /**
  * 跳转到指定fragment，并隐藏当前的fragment
  * @param to 跳转到此fragment
- * @param launchMode 添加类型
+ * @param requestCode 返回code，默认0
+ * @param mode 启动类型
  */
 fun ISupportActivity.start(to: ISupportFragment,
-                           @ISupportFragment.LaunchMode launchMode: Int = ISupportFragment.STANDARD) {
-    supportDelegate.start(to, launchMode)
+                           requestCode: Int = 0,
+                           mode: Transaction.LaunchMode = Transaction.LaunchMode.STANDARD) {
+    supportDelegate.start(to, requestCode, mode)
 }
 
-/**
- * 跳转到指定fragment，并指定requestCode
- * @param to 跳转到此fragment
- * @param requestCode 返回code
- */
-fun ISupportActivity.startForResult(to: ISupportFragment, requestCode: Int) {
-    supportDelegate.startForResult(to, requestCode)
-}
+///**
+// * 跳转到指定fragment，并指定requestCode
+// * @param to 跳转到此fragment
+// * @param requestCode 返回code
+// */
+//fun ISupportActivity.startForResult(to: ISupportFragment, requestCode: Int) {
+//    supportDelegate.startForResult(to, requestCode)
+//}
 
 /**
  * 跳转到指定fragment，并关闭当前的fragment
@@ -61,6 +64,7 @@ fun ISupportActivity.startWithPop(to: ISupportFragment) {
  */
 fun ISupportActivity.showHideFragment(show: ISupportFragment?,
                                       hide: ISupportFragment? = null) {
+    if (show == null) return
     supportDelegate.showHideFragment(show, hide)
 }
 
@@ -90,7 +94,7 @@ fun <T : ISupportFragment> ISupportActivity.findFragment(tag: String?): T? {
  * @param self 是否包含该fragment
  */
 fun <T : ISupportFragment> ISupportActivity.popToChild(clazz: Class<T>, self: Boolean) {
-    supportDelegate.popTo(clazz, self)
+    supportDelegate.popTo(clazz.name, self)
 }
 
 /**

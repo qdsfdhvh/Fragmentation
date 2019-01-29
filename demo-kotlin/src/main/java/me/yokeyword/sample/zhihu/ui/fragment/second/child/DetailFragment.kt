@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.content_detail.*
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.toolbar.*
 import me.yokeyword.fragmentation.ISupportFragment
-import me.yokeyword.fragmentation.startForResult
+import me.yokeyword.fragmentation.start
 import me.yokeyword.sample.R
 import me.yokeyword.sample.base.BaseFragment
 import me.yokeyword.sample.base.initToolbarNav
@@ -47,7 +47,7 @@ class DetailFragment : BaseFragment() {
     private fun initDelayView() {
         tv_content.setText(R.string.large_text)
         fab.setOnClickListener {
-            startForResult(ModifyDetailFragment.newInstance(title), REQ_MODIFY_FRAGMENT)
+            start(ModifyDetailFragment.newInstance(title), REQ_MODIFY_FRAGMENT)
         }
     }
 

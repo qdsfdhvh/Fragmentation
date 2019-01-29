@@ -54,16 +54,18 @@ class HomeFragment : BaseMainFragment(), Toolbar.OnMenuItemClickListener {
                     when (item.itemId) {
                         R.id.action_anim_veritical -> {
                             (ctx as ISupportActivity).fragmentAnimator = FragmentAnimator.verticalAnimator()
-                            Toast.makeText(ctx, R.string.anim_v, Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(ctx, R.string.anim_v, Toast.LENGTH_SHORT).show()
+                            toast(R.string.anim_v)
                         }
                         R.id.action_anim_horizontal -> {
                             (ctx as ISupportActivity).fragmentAnimator = FragmentAnimator.horizontalAnimator()
-                            Toast.makeText(ctx, R.string.anim_h, Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(ctx, R.string.anim_h, Toast.LENGTH_SHORT).show()
+                            toast( R.string.anim_h)
                         }
                         R.id.action_anim_none -> {
                             (ctx as ISupportActivity).fragmentAnimator = FragmentAnimator.noAnimator()
-                            Toast.makeText(ctx, R.string.anim_none, Toast.LENGTH_SHORT)
-                                .show()
+//                            Toast.makeText(ctx, R.string.anim_none, Toast.LENGTH_SHORT).show()
+                            toast(R.string.anim_none)
                         }
                     }
                     popupMenu.dismiss()
